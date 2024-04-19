@@ -1,10 +1,10 @@
-package tn.esprit.backend.Service;
+package club.esprit.backend.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import tn.esprit.backend.entities.Category;
-import tn.esprit.backend.exceptions.CategoryNotFoundException;
-import tn.esprit.backend.repository.CategoryRepository;
+import club.esprit.backend.entities.Category;
+import club.esprit.backend.exceptions.CategoryNotFoundException;
+import club.esprit.backend.repository.CategoryRepository;
 
 import java.util.List;
 import java.util.Optional;

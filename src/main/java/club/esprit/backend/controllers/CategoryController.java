@@ -1,26 +1,45 @@
-package tn.esprit.backend.controller;
+package club.esprit.backend.controllers;
 
+import club.esprit.backend.entities.Role;
+import club.esprit.backend.entities.User;
+import club.esprit.backend.services.jwt.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.backend.Service.ICategory;
-import tn.esprit.backend.entities.Category;
+import club.esprit.backend.services.ICategory;
+import club.esprit.backend.entities.Category;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/category")
+//@CrossOrigin(origins = "http://localhost:4200")
 public class CategoryController {
 
     private final ICategory categoryService;
+    private UserServiceImpl userService;
 
     @Autowired
-    public CategoryController(ICategory categoryService) {
+    public CategoryController(ICategory categoryService, UserServiceImpl userService) {
         this.categoryService = categoryService;
+        this.userService = userService;
     }
-
     @PostMapping
     public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User principal =
+                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+
+        User user = userService.findUserByEmail(principal.getUsername());
+
+        if (user.getRole() != Role.ADMIN) {
+            throw new AccessDeniedException("Only admins can create categories");
+        }
+
+        category.setUser(user);
         return ResponseEntity.ok(categoryService.saveCategory(category));
     }
 

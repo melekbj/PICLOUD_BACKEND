@@ -1,11 +1,11 @@
-package tn.esprit.backend.entities;
+package club.esprit.backend.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
 @Getter
@@ -27,11 +27,11 @@ public class Vote {
     private Long voteId;
     private VoteType voteType;
     @NotNull
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "postId", referencedColumnName = "postId")
     private Post post;
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    @ManyToOne(fetch = EAGER)
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private User user;
 }
 

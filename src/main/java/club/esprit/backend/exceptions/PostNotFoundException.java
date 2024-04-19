@@ -1,4 +1,4 @@
-package tn.esprit.backend.exceptions;
+package club.esprit.backend.exceptions;
 
 public class PostNotFoundException extends RuntimeException {
     public PostNotFoundException(String message) {

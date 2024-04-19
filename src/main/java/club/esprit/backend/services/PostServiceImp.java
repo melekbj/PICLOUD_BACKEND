@@ -1,13 +1,13 @@
-package tn.esprit.backend.Service;
+package club.esprit.backend.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import tn.esprit.backend.entities.Category;
-import tn.esprit.backend.entities.Post;
-import tn.esprit.backend.entities.User;
-import tn.esprit.backend.exceptions.PostNotFoundException;
-import tn.esprit.backend.repository.CategoryRepository;
-import tn.esprit.backend.repository.PostRepository;
+import club.esprit.backend.entities.Category;
+import club.esprit.backend.entities.Post;
+import club.esprit.backend.entities.User;
+import club.esprit.backend.exceptions.PostNotFoundException;
+import club.esprit.backend.repository.CategoryRepository;
+import club.esprit.backend.repository.PostRepository;
 
 import java.util.List;
 import java.util.Optional;

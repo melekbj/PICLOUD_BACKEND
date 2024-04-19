@@ -1,13 +1,11 @@
-package tn.esprit.backend.Controller;
+package club.esprit.backend.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.backend.Service.CategoryServiceImp;
-import tn.esprit.backend.Service.IPost;
-import tn.esprit.backend.Service.PostServiceImp;
-import tn.esprit.backend.entities.Category;
-import tn.esprit.backend.entities.Post;
+import club.esprit.backend.services.CategoryServiceImp;
+import club.esprit.backend.services.IPost;
+import club.esprit.backend.entities.Post;
 
 import java.util.List;
 

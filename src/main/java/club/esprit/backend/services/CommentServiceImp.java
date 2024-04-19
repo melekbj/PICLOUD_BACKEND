@@ -1,11 +1,11 @@
-package tn.esprit.backend.Service;
+package club.esprit.backend.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import tn.esprit.backend.entities.Comment;
-import tn.esprit.backend.entities.Post;
-import tn.esprit.backend.entities.User;
-import tn.esprit.backend.repository.CommentRepository;
+import club.esprit.backend.entities.Comment;
+import club.esprit.backend.entities.Post;
+import club.esprit.backend.entities.User;
+import club.esprit.backend.repository.CommentRepository;
 
 import java.util.List;
 import java.util.Optional;

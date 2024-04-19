@@ -1,9 +1,9 @@
-package tn.esprit.backend.repository;
+package club.esprit.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import tn.esprit.backend.entities.Post;
-import tn.esprit.backend.entities.User;
-import tn.esprit.backend.entities.Vote;
+import club.esprit.backend.entities.Post;
+import club.esprit.backend.entities.User;
+import club.esprit.backend.entities.Vote;
 
 import java.util.Optional;
 

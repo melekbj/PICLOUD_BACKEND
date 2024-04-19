@@ -1,13 +1,13 @@
-package tn.esprit.backend.entities;
+package club.esprit.backend.entities;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-import jakarta.persistence.*;
 import java.time.Instant;
 
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.SEQUENCE;
 
 
 @Getter
@@ -22,11 +22,11 @@ public class Comment {
     private Long idComment;
     @NotEmpty
     private String text;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "postId", referencedColumnName = "postId")
     private Post post;
     private Instant createdDate;
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    @ManyToOne(fetch = EAGER)
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private User user;
 }

@@ -1,9 +1,9 @@
-package tn.esprit.backend.Controller;
+package club.esprit.backend.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.backend.Service.VoteServiceImp;
-import tn.esprit.backend.entities.Vote;
+import club.esprit.backend.services.VoteServiceImp;
+import club.esprit.backend.entities.Vote;
 
 import java.util.List;
 

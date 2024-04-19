@@ -1,8 +1,8 @@
-package tn.esprit.backend.Service;
+package club.esprit.backend.services;
 
-import tn.esprit.backend.entities.Category;
-import tn.esprit.backend.entities.Post;
-import tn.esprit.backend.entities.User;
+import club.esprit.backend.entities.Category;
+import club.esprit.backend.entities.Post;
+import club.esprit.backend.entities.User;
 
 import java.util.List;
 import java.util.Optional;

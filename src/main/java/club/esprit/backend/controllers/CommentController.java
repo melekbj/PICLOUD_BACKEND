@@ -1,9 +1,9 @@
-package tn.esprit.backend.Controller;
+package club.esprit.backend.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.backend.Service.CommentServiceImp;
-import tn.esprit.backend.entities.Comment;
+import club.esprit.backend.services.CommentServiceImp;
+import club.esprit.backend.entities.Comment;
 
 import java.util.List;
 
