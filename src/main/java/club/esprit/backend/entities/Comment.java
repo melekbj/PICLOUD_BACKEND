@@ -1,5 +1,6 @@
 package club.esprit.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -24,6 +25,7 @@ public class Comment {
     private String text;
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "postId", referencedColumnName = "postId")
+    @JsonIgnore
     private Post post;
     private Instant createdDate;
     @ManyToOne(fetch = EAGER)

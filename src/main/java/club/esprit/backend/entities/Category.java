@@ -1,5 +1,6 @@
 package club.esprit.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -28,6 +29,7 @@ public class Category {
     @NotBlank(message = "Description is required")
     private String description;
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = EAGER)
+    @JsonIgnore
     private List<Post> posts;
     private Instant createdDate;
     @ManyToOne(fetch = EAGER)

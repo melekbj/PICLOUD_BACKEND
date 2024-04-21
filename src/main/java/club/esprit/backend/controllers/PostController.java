@@ -1,7 +1,11 @@
 package club.esprit.backend.controllers;
 
+import club.esprit.backend.entities.User;
+import club.esprit.backend.services.jwt.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import club.esprit.backend.services.CategoryServiceImp;
 import club.esprit.backend.services.IPost;
@@ -12,14 +16,21 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/posts")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PostController {
 
     private final IPost postService;
     private final CategoryServiceImp categoryService;
-
+    private UserServiceImpl userService;
 
     @PostMapping("/{categoryId}")
     public ResponseEntity<Post> createPost(@RequestBody Post post, @PathVariable Long categoryId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User principal =
+                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+
+        User user = userService.findUserByEmail(principal.getUsername());
+        post.setUser(user);
         return ResponseEntity.ok(postService.savePost(post, categoryId));
     }
 

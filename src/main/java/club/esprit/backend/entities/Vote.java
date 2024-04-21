@@ -1,5 +1,6 @@
 package club.esprit.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -29,6 +30,7 @@ public class Vote {
     @NotNull
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "postId", referencedColumnName = "postId")
+    @JsonIgnore
     private Post post;
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "id", referencedColumnName = "id")
