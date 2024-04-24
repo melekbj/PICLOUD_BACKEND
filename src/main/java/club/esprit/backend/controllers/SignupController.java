@@ -24,11 +24,15 @@ public class SignupController {
 
     @PostMapping
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
-        User createdUser = authService.createUser(signupRequest);
-        if (createdUser != null) {
+        try {
+            User createdUser = authService.createUser(signupRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create user");
+        } catch (RuntimeException e) {
+            if (e.getMessage().equals("Email already exists")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+            }
         }
     }
 

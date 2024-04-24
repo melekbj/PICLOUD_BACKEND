@@ -6,4 +6,11 @@ import club.esprit.backend.entities.User;
 
 public interface AuthService {
     User createUser(SignupRequest signupRequest);
+    public String verifyAccount(String email, String otp);
+
+    public String regenerateOtp(String email);
+
+    String forgotPassword(String email);
+
+    String setPassword(String email, String newPassword);
 }
