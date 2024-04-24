@@ -18,4 +18,6 @@ public interface IChat {
     public ChatEntity findByName(String name);
 
     public Optional<User> findUserByEmail(String email);
+
+    public List<User> findAllUsers();
 }

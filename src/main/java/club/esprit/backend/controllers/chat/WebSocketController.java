@@ -55,6 +55,11 @@ public class WebSocketController {
             return new ArrayList<MessageEntity>();
         }
     }
+
+    @GetMapping("/api/getAllUsers")
+    public List<User> getAllUsers() {
+        return chatDAO.findAllUsers();
+    }
     @GetMapping("/findByEmail/{email}")
     public Optional<User> getUserByEmail(@PathVariable String email){
         return chatDAO.findUserByEmail(email) ;

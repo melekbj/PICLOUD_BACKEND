@@ -58,4 +58,9 @@ public class ChatImpl implements IChat {
     public Optional<User> findUserByEmail(String email){
         return userRepository.findByEmail(email);
     }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
 }
