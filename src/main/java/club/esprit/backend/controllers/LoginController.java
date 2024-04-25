@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,7 +25,7 @@ import java.io.IOException;
 public class LoginController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserServiceImpl customerService;
+    private final UserServiceImpl userService;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
@@ -34,9 +33,9 @@ public class LoginController {
 
     @Autowired
     public LoginController(AuthenticationManager authenticationManager,
-                           UserServiceImpl customerService, JwtUtil jwtUtil, UserRepository userRepository) {
+                           UserServiceImpl userService, JwtUtil jwtUtil, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
-        this.customerService = customerService;
+        this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
     }
@@ -48,7 +47,7 @@ public class LoginController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
             // Check if the user is active
-            UserDetails userDetails = customerService.loadUserByUsername(loginRequest.getEmail());
+            UserDetails userDetails = userService.loadUserByUsername(loginRequest.getEmail());
             User user = userRepository.findByEmail(loginRequest.getEmail())
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + loginRequest.getEmail()));
 
