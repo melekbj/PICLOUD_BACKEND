@@ -34,9 +34,11 @@ public class WebSecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/signup", "/login").permitAll()
-                        .requestMatchers("/api/**").authenticated())
-                .sessionManagement(session -> session
+                        .requestMatchers("/signup", "/login","/club/clubs").permitAll()
+
+                        //.requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll())
+                        .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

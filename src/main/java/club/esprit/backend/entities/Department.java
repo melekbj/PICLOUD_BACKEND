@@ -31,7 +31,7 @@ public class Department {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "department",cascade = CascadeType.ALL )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "department" )
     private List<Membership> memberships;
     @JsonIgnore
     public Club getClub() {

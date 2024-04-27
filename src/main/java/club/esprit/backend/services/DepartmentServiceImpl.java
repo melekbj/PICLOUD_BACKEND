@@ -74,6 +74,13 @@ public class DepartmentServiceImpl implements IDepartmentService {
 
     @Override
     public void deleteDepartment(Long id) {
+
+        List<Membership> memberships=membershipRepository.findMembershipByDepartment_Id(id);
+        for (Membership membership:memberships){
+            membership.setDepartment(null);
+            membership.setResponsable(false);
+            membershipRepository.save(membership);
+        }
         departmentRepository.deleteById(id);
     }
 
