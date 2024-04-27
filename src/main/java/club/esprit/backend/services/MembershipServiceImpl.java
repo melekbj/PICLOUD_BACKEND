@@ -61,6 +61,14 @@ public class MembershipServiceImpl implements MembershipService {
     }
 
     @Override
+    public void deleteMemberByUserId_ClubId(Long userId, Long clubId) {
+        Membership m=membershipRepository.findByClub_IdAndAndUserId(clubId,userId);
+
+        membershipRepository.delete(m);
+
+    }
+
+    @Override
     public Membership getMemberById(Long memberId) {
         return membershipRepository.findById(memberId).orElse(null);
     }

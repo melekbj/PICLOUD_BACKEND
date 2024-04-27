@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findUsersByDepartmentId(@Param("departmentId") Long departmentId);
     @Query("SELECT m.user FROM Membership m WHERE m.club.id = :clubId AND m.department IS NULL")
     List<User> findMembersWithoutDepartment(@Param("clubId") Long clubId);
+
+    @Query("SELECT u FROM User u WHERE u.id NOT IN (SELECT m.user.id FROM Membership m WHERE m.club.id = :clubId)")
+    List<User> findUsersNotInClub(@Param("clubId") Long clubId);
 }

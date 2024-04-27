@@ -82,5 +82,9 @@ public class UserRestController {
         System.out.println(memberships);
         return ResponseEntity.ok(memberships);
     }
-
+@GetMapping("/userNotinClub")
+    public ResponseEntity<List<User>> findUsersNotClub(@RequestParam Long id) {
+        List<User> users = userService.findUsersNotClub(id);
+        return ResponseEntity.ok(users);
+    }
 }

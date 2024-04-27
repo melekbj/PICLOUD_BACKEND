@@ -15,6 +15,7 @@ public interface UserService {
     List<Membership> getMembersForUser(Long userId);
 
     List<User> getUsersByClub(Long id);
+    List<User> findUsersNotClub(Long id);
     List<User> findUsersByDepartmentId( Long departmentId);
     List<User> findMembersWithoutDepartment(Long id);
 }

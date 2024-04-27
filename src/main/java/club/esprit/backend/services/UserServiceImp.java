@@ -64,6 +64,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public List<User> findUsersNotClub(Long id) {
+        return userRepository.findUsersNotInClub(id);
+    }
+
+    @Override
     public List<User> findUsersByDepartmentId(Long departmentId) {
         return  userRepository.findUsersByDepartmentId(departmentId);
     }

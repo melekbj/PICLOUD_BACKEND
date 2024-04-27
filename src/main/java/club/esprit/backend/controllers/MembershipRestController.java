@@ -85,5 +85,9 @@ public class MembershipRestController {
             throw new RuntimeException(e);
         }
     }
-
+    @DeleteMapping("/deletem/{userId}/{clubId}")
+    public ResponseEntity<Void> deleteMemberByUserId_ClubId(@PathVariable("userId") Long userId, @PathVariable("clubId")Long clubId){
+        membershipService.deleteMemberByUserId_ClubId(userId,clubId);
+        return ResponseEntity.noContent().build();
+    }
 }
