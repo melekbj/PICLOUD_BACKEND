@@ -28,9 +28,7 @@ public class Membership implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "membership",cascade = CascadeType.ALL ,orphanRemoval = true)
 
     private List<BehaviorScore> behaviorscores;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver",cascade = CascadeType.ALL ,orphanRemoval = true)
 
-    private List<Finance> finances;
     @ManyToOne
     @JoinColumn(name = "user_id")
 

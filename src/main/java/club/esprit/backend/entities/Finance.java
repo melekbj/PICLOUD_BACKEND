@@ -17,7 +17,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 public class Finance {
-
+    public enum TransactionType {
+        DEBIT,
+        CREDIT,
+        TRANSFER
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,15 +29,14 @@ public class Finance {
     @Column(nullable = false)
     private String giver;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id")
-    private Membership receiver;
+
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
     @Column(name = "transaction_type", nullable = false)
-    private String transactionType;
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
 
     @Column(name = "transaction_date", nullable = false)
     private LocalDate transactionDate;
@@ -44,14 +47,7 @@ public class Finance {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
-@JsonIgnore
-    public Membership getReceiver() {
-        return receiver;
-    }
-@JsonProperty
-    public void setReceiver(Membership receiver) {
-        this.receiver = receiver;
-    }
+
     @JsonIgnore
     public Club getClub() {
         return club;
