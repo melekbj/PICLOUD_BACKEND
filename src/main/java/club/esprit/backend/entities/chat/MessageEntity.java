@@ -29,4 +29,8 @@ public class MessageEntity {
 
     @Column(name = "content")
     private String content;
+
+    private String deleteForAll;
+
+    private String whoMakeDelete;
 }

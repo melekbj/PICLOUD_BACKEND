@@ -28,7 +28,12 @@ public class WebSocketController {
     @MessageMapping("/chat/{to}")
     @SendTo("/topic/{to}")
     public ChatMessage chat(@DestinationVariable String to, MessageEntity message) {
-
+        String s = message.getDeleteForAll();
+        if (s != null){
+            this.messageDAO.deleteFor(message);
+            System.out.println("handling send message:*********** " + message + " to: " + to);
+            return new ChatMessage();
+        }
         System.out.println("handling send message: " + message + " to: " + to);
 
         message.setChatId(createAndOrGetChat(to));
@@ -36,12 +41,6 @@ public class WebSocketController {
         message = messageDAO.addMessage(message);
         return new ChatMessage(message.getContent(), message.getSender());
     }
-
-//    @PostMapping("/getChats")
-//    public List<ChatEntity> getChats(@RequestBody String user){
-//        return chatDAO.findByPartecipantLogin(user);
-//    }
-
     //returns an empty list if the chat doesn't exist
     @PostMapping("/getMessages")
     public List<MessageEntity> getMessages(@RequestBody String chat) {
@@ -64,6 +63,10 @@ public class WebSocketController {
         return chatDAO.findUserByEmail(email) ;
     }
 
+    @DeleteMapping("/deletemsg/{id}")
+    public void deletemsg(@PathVariable int id){
+        messageDAO.deleteById(id); ;
+    }
     private Long createAndOrGetChat(String name) {
         ChatEntity ce = chatDAO.findByName(name);
 

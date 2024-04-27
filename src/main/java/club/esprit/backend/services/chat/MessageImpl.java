@@ -38,6 +38,20 @@ public class MessageImpl implements IMessage{
     }
 
     @Override
+    public void deleteFor(MessageEntity m) {
+        MessageEntity message = messageRepository.findById(m.getMs_id()).get();
+        if (message.getWhoMakeDelete() != null && m.getDeleteForAll() != "all"){
+            messageRepository.deleteById(m.getMs_id());
+        }else {
+            message.setDeleteForAll(m.getDeleteForAll());
+            message.setWhoMakeDelete(m.getWhoMakeDelete());
+            messageRepository.save(message);
+        }
+
+    }
+
+
+    @Override
     public List<MessageEntity> findAllByChat(long chat_id) {
         return messageRepository.findByChatId(chat_id);
     }

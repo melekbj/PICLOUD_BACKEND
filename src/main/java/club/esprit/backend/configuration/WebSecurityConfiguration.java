@@ -34,7 +34,7 @@ public class WebSecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/signup", "/login", "/chat-socket/**", "/topic/**", "/app/chat/**", "/findByEmail/**", "/getMessages", "/getChats").permitAll()
+                        .requestMatchers("/signup", "/login", "/chat-socket/**", "/topic/**", "/app/chat/**").permitAll()
                         .requestMatchers("/api/**").authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
