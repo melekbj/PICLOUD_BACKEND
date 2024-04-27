@@ -26,9 +26,10 @@ public class Finance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+
     private String giver;
 
+    private String receiver;
 
 
     @Column(nullable = false, precision = 10, scale = 2)

@@ -10,4 +10,5 @@ public interface IFinanceService {
     void deleteFinance(Long id);
     Finance getFinance(Long id);
     List<Finance> getAllFinances();
+    List<Finance> getFinanceByClub(Long id);
 }

@@ -50,4 +50,9 @@ public class FinanceServiceImpl implements IFinanceService {
     public List<Finance> getAllFinances() {
         return financeRepository.findAll();
     }
+
+    @Override
+    public List<Finance> getFinanceByClub(Long id) {
+        return financeRepository.findFinancesByClub_Id(id);
+    }
 }

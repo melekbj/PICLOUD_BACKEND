@@ -15,29 +15,33 @@ public class FinanceRestController {
     @Autowired
     private IFinanceService financeService;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Finance> addFinance(@RequestBody Finance finance) {
         return ResponseEntity.ok(financeService.addFinance(finance));
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<Finance> updateFinance(@RequestBody Finance finance) {
         return ResponseEntity.ok(financeService.updateFinance(finance));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteFinance(@PathVariable Long id) {
         financeService.deleteFinance(id);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("get/{id}")
     public ResponseEntity<Finance> getFinance(@PathVariable Long id) {
         return ResponseEntity.ok(financeService.getFinance(id));
     }
 
-    @GetMapping
+    @GetMapping("all")
     public ResponseEntity<List<Finance>> getAllFinances() {
         return ResponseEntity.ok(financeService.getAllFinances());
+    }
+    @GetMapping("getbyclub/{id}")
+    public ResponseEntity<List<Finance>> getFinanceByClub(@PathVariable Long id) {
+        return ResponseEntity.ok(financeService.getFinanceByClub(id));
     }
 }
