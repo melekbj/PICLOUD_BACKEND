@@ -7,8 +7,6 @@ import club.esprit.backend.entities.chat.MessageEntity;
 import club.esprit.backend.services.chat.IChat;
 import club.esprit.backend.services.chat.IMessage;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -22,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api")
 public class WebSocketController {
     private IChat chatDAO;
     private IMessage messageDAO;
@@ -56,7 +55,7 @@ public class WebSocketController {
         }
     }
 
-    @GetMapping("/api/getAllUsers")
+    @GetMapping("/getAllUsers")
     public List<User> getAllUsers() {
         return chatDAO.findAllUsers();
     }
@@ -99,6 +98,4 @@ public class WebSocketController {
         String timeStamp = date + "-" + time;
         return timeStamp;
     }
-
-
 }
