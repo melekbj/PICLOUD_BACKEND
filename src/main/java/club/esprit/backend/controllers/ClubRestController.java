@@ -8,7 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -48,13 +53,33 @@ public class ClubRestController {
         }
     }*/
     @PostMapping("/add")
-    public ResponseEntity<Club> addClub(@RequestBody Club club) {
+    public ResponseEntity<Club> addClub(@RequestParam("name") String name,
+                                        @RequestParam("description") String description,
+                                        @RequestParam("contactInfo") String contactInfo,
+                                        @RequestParam("logo") MultipartFile logo) {
+        Club club = new Club();
+        club.setName(name);
+        club.setDescription(description);
+        club.setContactInfo(contactInfo);
 
+        // Handle the logo file
+        if (logo != null && !logo.isEmpty()) {
+            try {
+                // Save the file to a directory
+                String logoPath = "C:\\xampp\\htdocs\\img\\"; // Update this path
+                Path path = Paths.get(logoPath + logo.getOriginalFilename() );
+                Files.write(path, logo.getBytes());
 
-                Club savedClub = clubService.addClub(club);
-                return ResponseEntity.status(HttpStatus.CREATED).body(savedClub);
+                // Set the logo URL in the club object
+                club.setLogo(logo.getOriginalFilename());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+        }
 
-
+        Club savedClub = clubService.addClub(club);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedClub);
     }
 
     @PutMapping("/update/{clubId}")
