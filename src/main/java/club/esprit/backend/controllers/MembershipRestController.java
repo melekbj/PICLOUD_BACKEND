@@ -90,4 +90,13 @@ public class MembershipRestController {
         membershipService.deleteMemberByUserId_ClubId(userId,clubId);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/getMembershipbyCandU/{idUser}/{idClub}")
+    public ResponseEntity<Membership> getMembershipByUserandClub(@PathVariable("idUser") Long idUser, @PathVariable("idClub")Long idClub){
+        Membership membership = membershipService.getMembershipByUserandClub(idUser,idClub);
+        if (membership != null) {
+            return ResponseEntity.ok(membership);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

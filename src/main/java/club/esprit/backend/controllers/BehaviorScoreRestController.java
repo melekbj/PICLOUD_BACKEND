@@ -1,9 +1,9 @@
 package club.esprit.backend.controllers;
 
 import club.esprit.backend.entities.BehaviorScore;
-import club.esprit.backend.entities.BehaviorType;
 import club.esprit.backend.services.IBehaviorScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/behavior-score")
+@RequestMapping("/behaviorscore")
 public class BehaviorScoreRestController {
     private IBehaviorScoreService behaviorScoreService;
 
@@ -48,6 +48,20 @@ public class BehaviorScoreRestController {
     @GetMapping("/getByDateRange")
     public List<BehaviorScore> getBehaviorScoresByDateRange(@RequestParam Date date1, @RequestParam Date date2) {
         return behaviorScoreService.getBehaviorScoresByDateRange(date1, date2);
+    }
+@PostMapping("/addBehaviorScorebasedonMembership/{iduser}/{idClub}")
+    public BehaviorScore addBehaviorScorebasedonMembership(@PathVariable Long iduser, @PathVariable Long idClub, @RequestBody BehaviorScore behaviorScore) {
+        return behaviorScoreService.addBehaviorScorebasedonMembership(iduser, idClub, behaviorScore);
+    }
+
+    @GetMapping("/getByMembership/{idmembership}")
+    public ResponseEntity<List<BehaviorScore>> getBehaviorScoresByMembership( @PathVariable Long idmembership) {
+        List<BehaviorScore> behaviorScores = behaviorScoreService.getBehaviorScoresByMembership(idmembership);
+        if (behaviorScores != null && !behaviorScores.isEmpty()) {
+            return ResponseEntity.ok(behaviorScores);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
    /* @GetMapping("/getByType")

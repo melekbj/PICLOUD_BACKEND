@@ -1,23 +1,39 @@
 package club.esprit.backend.services;
 
 import club.esprit.backend.entities.BehaviorScore;
+import club.esprit.backend.entities.Membership;
 import club.esprit.backend.repository.BehaviorScoreRepository;
+import club.esprit.backend.repository.MembershipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Service
+
 public class BehaviorScoreServiceImpl implements IBehaviorScoreService {
 
     @Autowired
     private BehaviorScoreRepository behaviorScoreRepository;
 
+    @Autowired
+    private MembershipRepository membershipRepository;
+    private static final Logger logger = LoggerFactory.getLogger(BehaviorScoreServiceImpl.class);
     @Override
     public BehaviorScore addBehaviorScore(BehaviorScore behaviorScore) {
         return behaviorScoreRepository.save(behaviorScore);
     }
+
+    @Override
+    public BehaviorScore addBehaviorScorebasedonMembership(Long iduser, Long idClub, BehaviorScore behaviorScore) {
+        Membership membership= membershipRepository.findByClub_IdAndAndUserId(idClub,iduser);
+        behaviorScore.setMembership(membership);
+        return behaviorScoreRepository.save(behaviorScore);
+    }
+
+
 
     @Override
     public BehaviorScore updateBehaviorScore(BehaviorScore behaviorScore) {
@@ -32,6 +48,12 @@ public class BehaviorScoreServiceImpl implements IBehaviorScoreService {
     @Override
     public BehaviorScore getBehaviorScore(Long id) {
         return behaviorScoreRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<BehaviorScore> getBehaviorScoresByMembership(Long id) {
+       // logger.info(behaviorScoreRepository.getBehaviorScoreByMembership_Id(id).toString());
+        return behaviorScoreRepository.getBehaviorScoreByMembership_Id(id);
     }
 
     @Override

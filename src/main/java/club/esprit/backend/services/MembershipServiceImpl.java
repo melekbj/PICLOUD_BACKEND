@@ -87,6 +87,11 @@ public class MembershipServiceImpl implements MembershipService {
         return membershipRepository.findByDepartment_Id(id);
     }
 
+    @Override
+    public Membership getMembershipByUserandClub(Long idUser, Long idClub) {
+       return  membershipRepository.findByClub_IdAndAndUserId(idClub,idUser);
+    }
+
     public List<Membership> assignUsersToDepartment(List<Long> userIds, Long departmentId,Long clubId) throws ChangeSetPersister.NotFoundException {
 
         Department department = departmentRepository.findById(departmentId).orElseThrow(ChangeSetPersister.NotFoundException::new);

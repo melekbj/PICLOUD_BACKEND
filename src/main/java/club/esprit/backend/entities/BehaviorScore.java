@@ -2,10 +2,7 @@ package club.esprit.backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -15,8 +12,17 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString
 public class BehaviorScore {
-
+    public enum BehaviorType {
+        POSITIVE,
+        NEGATIVE,
+        NEUTRAL,
+        ATTENDANCE,
+        PARTICIPATION,
+        PERFORMANCE,
+        OTHER
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,9 +31,9 @@ public class BehaviorScore {
     @JoinColumn(name = "member_id")
     private Membership membership;
 
-    //@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "behavior_type", nullable = false)
-    private String behaviorType;
+    private BehaviorType behaviorType;
 
     @Column(nullable = false)
     private int score;
