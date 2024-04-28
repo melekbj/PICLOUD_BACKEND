@@ -37,7 +37,37 @@ public class BehaviorScoreServiceImpl implements IBehaviorScoreService {
 
     @Override
     public BehaviorScore updateBehaviorScore(BehaviorScore behaviorScore) {
-        return behaviorScoreRepository.save(behaviorScore);
+        try {
+            BehaviorScore existingBehaviorScore = behaviorScoreRepository.findById(behaviorScore.getId()).orElse(null);
+
+            if (existingBehaviorScore == null) {
+                throw new Exception("BehaviorScore with id " + behaviorScore.getId() + " does not exist");
+            }
+
+            if (behaviorScore.getBehaviorType() != null) {
+                existingBehaviorScore.setBehaviorType(behaviorScore.getBehaviorType());
+            }
+            if (behaviorScore.getScore() != 0) {
+                existingBehaviorScore.setScore(behaviorScore.getScore());
+            }
+            if (behaviorScore.getDateRecorded() != null) {
+                existingBehaviorScore.setDateRecorded(behaviorScore.getDateRecorded());
+            }
+            if (behaviorScore.getDescription() != null) {
+                existingBehaviorScore.setDescription(behaviorScore.getDescription());
+            }
+            if (behaviorScore.getEvent() != null) {
+                existingBehaviorScore.setEvent(behaviorScore.getEvent());
+            }
+            if (behaviorScore.getMembership() != null) {
+                existingBehaviorScore.setMembership(behaviorScore.getMembership());
+            }
+
+            return behaviorScoreRepository.save(existingBehaviorScore);
+        } catch (Exception e) {
+            logger.error("Error updating BehaviorScore: ", e);
+            return null;
+        }
     }
 
     @Override

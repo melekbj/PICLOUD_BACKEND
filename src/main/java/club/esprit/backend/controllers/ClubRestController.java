@@ -26,32 +26,7 @@ public class ClubRestController {
     public ClubRestController(IClubService clubService) {
         this.clubService = clubService;
     }
-    /*@PostMapping("/add/file")
-    public ResponseEntity<Club> addClubfile(
-                                        @RequestPart("file") MultipartFile file) {
 
-        try {
-            if (file != null) {
-                System.out.println(file.getOriginalFilename());
-               // club.setLogo("http://localhost:8080/img/"+file.getOriginalFilename()+ club.getId());
-                //file.transferTo(new File("C:/Users/abdes/OneDrive - ESPRIT/Bureau/selfworkpicloud/SPRING_2/src/main/resources/static/img"));
-                file.transferTo(new File("C:/xampp/htdocs/img"));
-
-
-
-
-                //Club savedClub = clubService.addClub(club);
-                return ResponseEntity.status(HttpStatus.CREATED).body(new Club());
-            } else {
-
-                System.out.println("ok");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }*/
     @PostMapping("/add")
     public ResponseEntity<Club> addClub(@RequestParam("name") String name,
                                         @RequestParam("description") String description,

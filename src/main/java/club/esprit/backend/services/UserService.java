@@ -18,4 +18,6 @@ public interface UserService {
     List<User> findUsersNotClub(Long id);
     List<User> findUsersByDepartmentId( Long departmentId);
     List<User> findMembersWithoutDepartment(Long id);
+    //
+    User getByEmail(String email);
 }

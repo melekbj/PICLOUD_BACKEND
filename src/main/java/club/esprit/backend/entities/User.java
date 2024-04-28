@@ -23,6 +23,7 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",cascade = CascadeType.ALL ,orphanRemoval = true)
     private List<Membership> memberships;
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RequestToJoin> requestsToJoin;
 
 }

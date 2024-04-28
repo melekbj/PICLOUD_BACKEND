@@ -77,4 +77,9 @@ public class UserServiceImp implements UserService {
     public List<User> findMembersWithoutDepartment(Long id) {
         return userRepository.findMembersWithoutDepartment(id);
     }
+
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).get();
+    }
 }

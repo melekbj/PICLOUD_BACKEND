@@ -1,6 +1,7 @@
 package club.esprit.backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -20,6 +21,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
 public class Club  implements Serializable{
 
     @Id
@@ -54,5 +56,8 @@ public class Club  implements Serializable{
         this.contactInfo = contactInfo;
         this.logo = logo;
     }
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<RequestToJoin> requestsToJoin;
 
 }

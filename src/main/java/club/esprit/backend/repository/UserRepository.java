@@ -23,4 +23,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.id NOT IN (SELECT m.user.id FROM Membership m WHERE m.club.id = :clubId)")
     List<User> findUsersNotInClub(@Param("clubId") Long clubId);
+
 }

@@ -38,6 +38,9 @@ public class UserRestController {
         }
     }
 
+
+
+
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -86,5 +89,12 @@ public class UserRestController {
     public ResponseEntity<List<User>> findUsersNotClub(@RequestParam Long id) {
         List<User> users = userService.findUsersNotClub(id);
         return ResponseEntity.ok(users);
+    }
+
+
+    // get by mail
+    @GetMapping("/email/{e}")
+    public User getUserById(@PathVariable("e") String e) {
+        return userService.getByEmail(e);
     }
 }
