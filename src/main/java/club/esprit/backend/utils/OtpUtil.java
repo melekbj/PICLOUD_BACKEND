@@ -2,8 +2,6 @@ package club.esprit.backend.utils;
 
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Random;
 
 @Component
@@ -20,7 +18,6 @@ public class OtpUtil {
         return output;
     }
 
-    public LocalDateTime generateExpirationTime() {
-        return LocalDateTime.now().plus(30, ChronoUnit.MINUTES);  // OTP valid for 30 minutes
-    }
+
+
 }
