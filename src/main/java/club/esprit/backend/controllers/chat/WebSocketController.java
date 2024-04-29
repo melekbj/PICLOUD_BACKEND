@@ -32,8 +32,7 @@ public class WebSocketController {
             this.messageDAO.deleteFor(message);
             System.out.println("handling send message:*********** " + message + " to: " + to);
             return new ChatMessage();
-        }
-        if (message.isReaction() || ! message.isReaction()){
+        }else if (message.getMs_id() != 0){
             this.messageDAO.msgReact(message);
             return new ChatMessage();
         }
