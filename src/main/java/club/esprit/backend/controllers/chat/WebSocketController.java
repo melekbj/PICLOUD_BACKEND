@@ -30,13 +30,11 @@ public class WebSocketController {
     public ChatMessage chat(@DestinationVariable String to, MessageEntity message) {
         if (message.getWhoMakeDelete() != null){
             this.messageDAO.deleteFor(message);
-            System.out.println("handling send message:*********** " + message + " to: " + to);
             return new ChatMessage();
         }else if (message.getMs_id() != 0){
             this.messageDAO.msgReact(message);
             return new ChatMessage();
         }
-        System.out.println("handling send message: " + message + " to: " + to);
 
         message.setChatId(createAndOrGetChat(to));
         message.setT_stamp(generateTimeStamp());
@@ -84,11 +82,9 @@ public class WebSocketController {
     private String generateTimeStamp() {
         Instant i = Instant.now();
         String date = i.toString();
-        System.out.println("Source: " + i.toString());
         int endRange = date.indexOf('T');
         date = date.substring(0, endRange);
         date = date.replace('-', '/');
-        System.out.println("Date extracted: " + date);
         String time = Integer.toString(i.atZone(ZoneOffset.UTC).getHour() + 1);
         time += ":";
 
@@ -99,7 +95,6 @@ public class WebSocketController {
             time += "0" + Integer.toString(minutes);
         }
 
-        System.out.println("Time extracted: " + time);
         String timeStamp = date + "-" + time;
         return timeStamp;
     }
