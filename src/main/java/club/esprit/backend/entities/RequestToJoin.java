@@ -44,10 +44,26 @@ public class RequestToJoin {
     @Transient
     private  String ClubName;
     @Transient
+    private String ClubImage;
+    @Transient
     private String UserEmail;
     @Transient
     private Long Userid;
 
-
-
+    @JsonProperty
+    public void setClub(Club club) {
+        this.club = club;
+    }
+    @JsonProperty
+    public void setUser(User user) {
+        this.user = user;
+    }
+    @JsonIgnore
+    public Club getClub() {
+        return club;
+    }
+    @JsonIgnore
+    public User getUser() {
+        return user;
+    }
 }

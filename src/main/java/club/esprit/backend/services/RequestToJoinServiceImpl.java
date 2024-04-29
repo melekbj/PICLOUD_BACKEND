@@ -1,12 +1,16 @@
 package club.esprit.backend.services;
 
-import club.esprit.backend.entities.Club;
 import club.esprit.backend.entities.RequestToJoin;
+import club.esprit.backend.entities.User;
 import club.esprit.backend.repository.ClubRepository;
 import club.esprit.backend.repository.RequestToJoinRepository;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +38,13 @@ public class RequestToJoinServiceImpl implements RequestToJoinService {
 
     @Override
     public List<RequestToJoin> getRequestsToJoinByUserId(Long userId) {
-        return requestToJoinRepository.findByClub_Id(userId);
+        List<RequestToJoin> request= requestToJoinRepository.findByUserId(userId);
+        for (RequestToJoin requestToJoin : request) {
+            requestToJoin.setClubName(requestToJoin.getClub().getName());
+            requestToJoin.setClubImage(requestToJoin.getClub().getLogo());
+        }
+
+        return request;
     }
 
     @Override
@@ -81,9 +91,30 @@ public class RequestToJoinServiceImpl implements RequestToJoinService {
         if (newRequestToJoin.getStatus() != null) {
             existingRequestToJoin.setStatus(newRequestToJoin.getStatus());
         }
-
+        String message;
+        if(newRequestToJoin.getStatus().equals("Accepted"))
+        {message="Your application to join our club "+existingRequestToJoin.getClub().getName()+" has been accepted. Welcome to our club!";}
+        else{
+            message="Your application to join our club "+existingRequestToJoin.getClub().getName()+" has been rejected. We are sorry!";
+        }
+        sendEmail(existingRequestToJoin.getUser().getEmail(),message, existingRequestToJoin.getUser());
         return requestToJoinRepository.save(existingRequestToJoin);
     }
+    @Autowired
+    private JavaMailSender emailSender;
 
+    public void sendEmail(String recipient,String messagebody, User user) {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        try {
+            helper.setTo(recipient);
+            helper.setSubject("Application");
+            helper.setText(messagebody);
+            emailSender.send(message);
+            System.out.println("Message envoye");
+        } catch (jakarta.mail.MessagingException e) {
+            System.out.println("Error: " + e.toString());
+        }
+    }
 
 }

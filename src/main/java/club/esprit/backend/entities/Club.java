@@ -1,5 +1,6 @@
 package club.esprit.backend.entities;
 
+import club.esprit.backend.entities.quiz.Test;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -60,4 +61,6 @@ public class Club  implements Serializable{
     @JsonIgnore
     private List<RequestToJoin> requestsToJoin;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Test> Tests;
 }

@@ -15,4 +15,6 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
     List<Club> findClubsByUserId(@Param("userId") Long userId);
 
 
+
+
 }

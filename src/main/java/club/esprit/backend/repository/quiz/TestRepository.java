@@ -10,4 +10,5 @@ import java.util.List;
 public interface TestRepository extends JpaRepository<Test,Long> {
     @Query("SELECT t FROM Test t JOIN t.questions q WHERE q.id = :questionId")
     List<Test> findAllByQuestionId(@Param("questionId") Long questionId);
+
 }

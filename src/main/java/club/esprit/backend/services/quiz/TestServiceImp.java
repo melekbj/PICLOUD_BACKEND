@@ -100,6 +100,7 @@ public class TestServiceImp implements ITestService {
     @Override
     public String addquestiontotest(Long idTest, Question question) {
         Test test = testRepository.findById(idTest).orElse(null);
+        question.setImage(question.getQuestion());
         test.getQuestions().add(question);
         testRepository.save(test);
         return null;
