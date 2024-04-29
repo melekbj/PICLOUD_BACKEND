@@ -28,8 +28,16 @@ public class Post {
     @JoinColumn(name = "category_id", nullable = false)
     @JsonIgnore
     private Category category;
+    @Transient
+    private String userName;
+    public String getUserName() {
+        return user != null ? user.getName() : null;
+    }
     @PrePersist
     public void prePersist() {
         createdDate = Instant.now();
+        if (user != null) {
+            userName = user.getName();
+        }
     }
 }

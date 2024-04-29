@@ -43,13 +43,20 @@ public class PostController {
     public ResponseEntity<List<Post>> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
     }
-
+    @GetMapping("/by-category/{categoryId}")
+    public ResponseEntity<List<Post>> getPostsByCategory(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(postService.getPostsByCategory(categoryId));
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         postService.deletePost(id);
         return ResponseEntity.ok().build();
     }
-
+    @PutMapping("/vote/{id}")
+    public ResponseEntity<Post> updateVoteCount(@PathVariable Long id, @RequestBody int voteCount) {
+        Post updatedPost = postService.updateVoteCount(id, voteCount);
+        return ResponseEntity.ok(updatedPost);
+    }
     @PutMapping("/{id}")
     public ResponseEntity<Post> updatePost(@PathVariable Long id, @RequestBody Post post) {
         Post existingPost = postService.getPostById(id)

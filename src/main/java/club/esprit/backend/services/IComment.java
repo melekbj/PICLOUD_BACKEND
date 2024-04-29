@@ -12,7 +12,8 @@ public interface IComment {
     Optional<Comment> getCommentById(Long id);
     List<Comment> getAllComments();
     void deleteComment(Long id);
+   // Comment updateComment(Comment comment);
     List<Comment> getCommentsByPost(Post post);
     List<Comment> getCommentsByUser(User user);
-    Comment updateComment(Long id, String newContent);
+    Comment updateComment(Long commentId, String updatedText);
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByCategory(Category category);
-
+    List<Post> findByCategory_IdCategory(Long idCategory);
     List<Post> findByUser(User user);
 
 

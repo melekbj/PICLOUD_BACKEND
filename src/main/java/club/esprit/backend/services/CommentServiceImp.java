@@ -17,7 +17,9 @@ public class CommentServiceImp implements IComment{
     public Comment saveComment(Comment comment) {
         return commentRepository.save(comment) ;
     }
-
+    public List<Comment> getCommentsByPostId(Long postId) {
+        return commentRepository.findByPostPostId(postId);
+    }
     @Override
     public Optional<Comment> getCommentById(Long id) {
             return commentRepository.findById(id);
@@ -42,16 +44,11 @@ public class CommentServiceImp implements IComment{
     public List<Comment> getCommentsByUser(User user) {
         return commentRepository.findAllByUser(user);
     }
-
     @Override
-    public Comment updateComment(Long id, String newContent) {
-        Optional<Comment> commentOptional = commentRepository.findById(id);
-        if (commentOptional.isPresent()) {
-            Comment comment = commentOptional.get();
-            comment.setText(newContent);
-            return commentRepository.save(comment);
-        } else {
-            throw new RuntimeException("Comment not found for id: " + id);
-        }
+    public Comment updateComment(Long commentId, String updatedText) {
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment with id " + commentId + " not found"));
+        existingComment.setText(updatedText);
+        return commentRepository.save(existingComment);
     }
 }

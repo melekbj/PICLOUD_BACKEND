@@ -23,6 +23,7 @@ public class Vote {
         VoteType(int direction) {
         }
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long voteId;

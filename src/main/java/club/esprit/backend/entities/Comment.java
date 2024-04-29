@@ -31,4 +31,16 @@ public class Comment {
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "id", referencedColumnName = "id")
     private User user;
+    @Transient
+    private String userName;
+    public String getUserName() {
+        return user != null ? user.getName() : null;
+    }
+    @PrePersist
+    public void prePersist() {
+        createdDate = Instant.now();
+        if (user != null) {
+            userName = user.getName();
+        }
+    }
 }

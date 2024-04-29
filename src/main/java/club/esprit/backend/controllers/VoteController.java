@@ -1,6 +1,13 @@
 package club.esprit.backend.controllers;
 
+import club.esprit.backend.entities.Post;
+import club.esprit.backend.entities.User;
+import club.esprit.backend.services.PostServiceImp;
+import club.esprit.backend.services.jwt.UserServiceImpl;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import club.esprit.backend.services.VoteServiceImp;
 import club.esprit.backend.entities.Vote;
@@ -8,17 +15,26 @@ import club.esprit.backend.entities.Vote;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/votes")
 public class VoteController {
 
     private final VoteServiceImp voteService;
+    private final PostServiceImp postService;
+    private final UserServiceImpl userService;
 
-    public VoteController(VoteServiceImp voteService) {
-        this.voteService = voteService;
-    }
 
-    @PostMapping
-    public ResponseEntity<Vote> createVote(@RequestBody Vote vote) {
+    @PostMapping("/{postId}")
+    public ResponseEntity<Vote> createVote(@RequestBody Vote vote, @PathVariable Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User principal =
+                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+
+        User user = userService.findUserByEmail(principal.getUsername());
+        vote.setUser(user);
+        Post post = postService.getPostById(postId)
+                .orElseThrow(() -> new RuntimeException("Post with id " + postId + " not found"));
+        vote.setPost(post);
         return ResponseEntity.ok(voteService.saveVote(vote));
     }
 
@@ -45,4 +61,15 @@ public class VoteController {
         existingVote.setVoteType(newVoteType);
         return ResponseEntity.ok(voteService.updateVote(id, newVoteType));
     }
+    @DeleteMapping("/{postId}/cancel")
+    public ResponseEntity<Void> cancelVote(@PathVariable Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.userdetails.User principal =
+                (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+
+        User user = userService.findUserByEmail(principal.getUsername());
+        voteService.cancelVote(postId, user);
+        return ResponseEntity.ok().build();
+    }
+
 }

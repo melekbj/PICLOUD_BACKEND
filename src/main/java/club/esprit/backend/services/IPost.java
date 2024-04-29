@@ -15,6 +15,8 @@ public interface IPost {
     List<Post> getPostsByCategory(Category category);
     List<Post> getPostsByUser(User user);
     Post udpatePost(Post post);
+    List<Post> getPostsByCategory(Long categoryId);
+    Post updateVoteCount(Long id, int voteCount);
     Post updatePostName(Long id, String newName);
     Post updatePostDescription(Long id, String newDescription);
     Post updatePostUrl(Long id, String newUrl);

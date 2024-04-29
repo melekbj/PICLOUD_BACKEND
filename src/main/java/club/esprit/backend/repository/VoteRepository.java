@@ -9,4 +9,6 @@ import java.util.Optional;
 
 public interface VoteRepository extends JpaRepository<Vote, Long> {
     Optional<Vote> findTopByPostAndUserOrderByVoteIdDesc(Post post, User currentUser);
+    Optional<Vote> findVoteByPostAndUser(Post post, User currentUser); // Modify this line
+    int countByPost(Post post);
 }

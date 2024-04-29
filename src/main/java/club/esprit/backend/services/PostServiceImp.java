@@ -24,8 +24,17 @@ public class PostServiceImp implements IPost{
         post.setCategory(category);
         return postRepository.save(post);
     }
-
-
+    @Override
+    public Post updateVoteCount(Long id, int voteCount) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException("Post with id " + id + " not found"));
+        post.setVoteCount(voteCount);
+        return postRepository.save(post);
+    }
+    @Override
+    public List<Post> getPostsByCategory(Long categoryId) {
+        return postRepository.findByCategory_IdCategory(categoryId);
+    }
     @Override
     public Optional<Post> getPostById(Long id) {
         return postRepository.findById(id);
