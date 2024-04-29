@@ -28,10 +28,13 @@ public class WebSocketController {
     @MessageMapping("/chat/{to}")
     @SendTo("/topic/{to}")
     public ChatMessage chat(@DestinationVariable String to, MessageEntity message) {
-        String s = message.getDeleteForAll();
-        if (s != null){
+        if (message.getWhoMakeDelete() != null){
             this.messageDAO.deleteFor(message);
             System.out.println("handling send message:*********** " + message + " to: " + to);
+            return new ChatMessage();
+        }
+        if (message.isReaction() || ! message.isReaction()){
+            this.messageDAO.msgReact(message);
             return new ChatMessage();
         }
         System.out.println("handling send message: " + message + " to: " + to);

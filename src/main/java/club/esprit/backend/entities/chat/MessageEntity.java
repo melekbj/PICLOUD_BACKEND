@@ -30,7 +30,9 @@ public class MessageEntity {
     @Column(name = "content")
     private String content;
 
-    private String deleteForAll;
+    private boolean deleteForAll;
 
     private String whoMakeDelete;
+
+    private boolean reaction;
 }

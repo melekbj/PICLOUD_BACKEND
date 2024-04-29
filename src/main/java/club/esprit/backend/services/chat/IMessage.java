@@ -12,5 +12,6 @@ public interface IMessage {
     public List<MessageEntity> retrieveAll();
     public void deleteById(long id);
     public void deleteFor(MessageEntity id);
+    public void msgReact(MessageEntity id);
     public List<MessageEntity> findAllByChat(long chat_id);
 }

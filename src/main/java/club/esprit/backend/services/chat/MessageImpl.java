@@ -40,14 +40,21 @@ public class MessageImpl implements IMessage{
     @Override
     public void deleteFor(MessageEntity m) {
         MessageEntity message = messageRepository.findById(m.getMs_id()).get();
-        if (message.getWhoMakeDelete() != null && m.getDeleteForAll() != "all"){
+        if (message.getWhoMakeDelete() != null && !m.isDeleteForAll()){
             messageRepository.deleteById(m.getMs_id());
         }else {
-            message.setDeleteForAll(m.getDeleteForAll());
+            message.setDeleteForAll(m.isDeleteForAll());
             message.setWhoMakeDelete(m.getWhoMakeDelete());
             messageRepository.save(message);
         }
 
+    }
+
+    @Override
+    public void msgReact(MessageEntity m) {
+        MessageEntity message = messageRepository.findById(m.getMs_id()).get();
+        message.setReaction(m.isReaction());
+        messageRepository.save(message);
     }
 
 
