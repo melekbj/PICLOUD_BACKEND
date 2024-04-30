@@ -50,8 +50,8 @@ public class TestRestController {
     }
 
     @PostMapping("/add-quiz-api")
-    public void addtestwithapi(@RequestBody List<ApiOpenquizzdb> apiOpenquizzdbs) {
-        testService.addtestwithapi(apiOpenquizzdbs);
+    public Test addtestwithapi(@RequestBody List<ApiOpenquizzdb> apiOpenquizzdbs) {
+        return testService.addtestwithapi(apiOpenquizzdbs);
     }
 
     @DeleteMapping("/delete/{testId}")

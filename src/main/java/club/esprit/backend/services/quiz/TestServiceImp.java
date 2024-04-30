@@ -1,7 +1,9 @@
 package club.esprit.backend.services.quiz;
 
+import club.esprit.backend.entities.Club;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.entities.quiz.*;
+import club.esprit.backend.repository.ClubRepository;
 import club.esprit.backend.repository.UserRepository;
 import club.esprit.backend.repository.quiz.*;
 import jakarta.transaction.Transactional;
@@ -22,7 +24,7 @@ public class TestServiceImp implements ITestService {
 
     UserRepository userRepository;
     UserTestRepository userTestRepository;
-
+    ClubRepository clubRepository;
     /**
      * @param test
      * @return
@@ -57,8 +59,18 @@ public class TestServiceImp implements ITestService {
         testRepository.save(test);
     }
 
-    @Override
+    @Transactional
     public void deletetest(Long testId) {
+        Test test = testRepository.findById(testId).orElseThrow(() -> new RuntimeException("Test not found"));
+        List<Club> clubs = clubRepository.findAll();
+        for (Club club : clubs) {
+            List<Test> tests = club.getTests();
+            if (tests.contains(test)) {
+                tests.remove(test);
+                club.setTests(tests);
+                clubRepository.save(club);
+            }
+        }
         testRepository.deleteById(testId);
     }
 
@@ -178,8 +190,9 @@ public class TestServiceImp implements ITestService {
     }
 
     @Override
-    public void addtestwithapi(List<ApiOpenquizzdb> apiOpenquizzdbs) {
+    public Test addtestwithapi(List<ApiOpenquizzdb> apiOpenquizzdbs) {
         Test test = new Test();
+        System.out.println(apiOpenquizzdbs);
         ApiOpenquizzdb anyone = apiOpenquizzdbs.get(0);
         test.setTitle(anyone.getCategorie());
         test.setDescription("a simple test about " + anyone.getCategorie() + " in" + anyone.getLangue() + " and the difficulti is : " + anyone.getDifficulte());
@@ -211,7 +224,7 @@ public class TestServiceImp implements ITestService {
         test.setActive(true);
         test.setQuestions(questions);
         testRepository.save(test);
-
+ return test;
     }
 
     @Override

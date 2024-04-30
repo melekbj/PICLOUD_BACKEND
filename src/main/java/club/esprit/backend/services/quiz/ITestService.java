@@ -34,7 +34,7 @@ public interface ITestService {
 
     //
     //
-    public void addtestwithapi(List<ApiOpenquizzdb> apiOpenquizzdbs);
+    public Test addtestwithapi(List<ApiOpenquizzdb> apiOpenquizzdbs);
 
     public void deleteut(Long id);
 

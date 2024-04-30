@@ -13,8 +13,8 @@ import java.util.List;
 public interface ClubRepository extends JpaRepository<Club, Long> {
     @Query("SELECT m.club FROM Membership m WHERE m.user.id = :userId")
     List<Club> findClubsByUserId(@Param("userId") Long userId);
-
-
+    @Query("SELECT m.club FROM Membership m WHERE m.user.id = :userId AND m.president = true")
+    List<Club> findClubsByUserIdAndPresident(@Param("userId") Long userId);
 
 
 }

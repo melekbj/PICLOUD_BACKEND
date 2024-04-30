@@ -2,6 +2,7 @@ package club.esprit.backend.controllers;
 
 import club.esprit.backend.entities.Club;
 import club.esprit.backend.entities.User;
+import club.esprit.backend.entities.quiz.Test;
 import club.esprit.backend.services.IClubService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +87,12 @@ public class ClubRestController {
     public List<Club> getAllClubs(@PathVariable Long id) {
         return clubService.getClubByUser(id);
     }
-
+    @GetMapping("/getbyuserandpresident/{id}")
+    public Club findClubsByUserIdAndPresident(@PathVariable Long id) {
+        return  clubService.findClubsByUserIdAndPresident(id);
+    }
+        @PutMapping("/updateclubtest/{clubId}")
+        public Club updateClubTest(@PathVariable  Long clubId,@RequestBody Test newTest){
+            return clubService.updateClubTest(clubId,newTest);
+        }
 }
