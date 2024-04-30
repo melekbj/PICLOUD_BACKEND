@@ -1,5 +1,6 @@
 package club.esprit.backend.services;
 
+import club.esprit.backend.entities.Club;
 import club.esprit.backend.entities.RequestToJoin;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.repository.ClubRepository;
@@ -40,8 +41,9 @@ public class RequestToJoinServiceImpl implements RequestToJoinService {
     public List<RequestToJoin> getRequestsToJoinByUserId(Long userId) {
         List<RequestToJoin> request= requestToJoinRepository.findByUserId(userId);
         for (RequestToJoin requestToJoin : request) {
-            requestToJoin.setClubName(requestToJoin.getClub().getName());
-            requestToJoin.setClubImage(requestToJoin.getClub().getLogo());
+            Club club = clubrespository.findById(requestToJoin.getClub().getId()).orElse(null);
+            requestToJoin.setClubName(club.getName());
+            requestToJoin.setClubImage(club.getLogo());
         }
 
         return request;
@@ -54,6 +56,7 @@ public class RequestToJoinServiceImpl implements RequestToJoinService {
            request.setUserName(request.getUser().getName());
               request.setUserEmail(request.getUser().getEmail());
          request.setUserid(request.getUser().getId());
+
        }
 
 
