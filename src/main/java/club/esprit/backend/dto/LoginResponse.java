@@ -1,4 +1,4 @@
 package club.esprit.backend.dto;
 
-public record LoginResponse(String jwt, String email) {
+public record LoginResponse(String jwt) {
 }
