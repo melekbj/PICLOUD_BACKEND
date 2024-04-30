@@ -1,6 +1,8 @@
 package club.esprit.backend.services.chat;
 
+import club.esprit.backend.entities.chat.ChatEntity;
 import club.esprit.backend.entities.chat.MessageEntity;
+import club.esprit.backend.repository.chat.ChatRepository;
 import club.esprit.backend.repository.chat.MessageRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import java.util.List;
 public class MessageImpl implements IMessage{
 
     private MessageRepository messageRepository;
+    private ChatRepository chatRepository;
     @Override
     public MessageEntity addMessage(MessageEntity message) {
         return messageRepository.save(message);
@@ -61,5 +64,12 @@ public class MessageImpl implements IMessage{
     @Override
     public List<MessageEntity> findAllByChat(long chat_id) {
         return messageRepository.findByChatId(chat_id);
+    }
+
+    @Override
+    public MessageEntity getTheLastMsg(String channeName) {
+        ChatEntity chatEntity = chatRepository.findByName(channeName);
+
+        return messageRepository.findFirstByChatIdOrderByCreatedAtDesc(chatEntity.getChat_id());
     }
 }

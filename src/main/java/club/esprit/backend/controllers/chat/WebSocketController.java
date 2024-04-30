@@ -1,6 +1,7 @@
 package club.esprit.backend.controllers.chat;
 
 import club.esprit.backend.dto.ChatMessage;
+import club.esprit.backend.dto.chat.LastMessage;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.entities.chat.ChatEntity;
 import club.esprit.backend.entities.chat.MessageEntity;
@@ -54,9 +55,9 @@ public class WebSocketController {
         }
     }
 
-    @GetMapping("/getAllUsers")
-    public List<User> getAllUsers() {
-        return chatDAO.findAllUsers();
+    @GetMapping("/getAllUsers/{email}")
+    public List<LastMessage> getAllUsers(@PathVariable String email) {
+        return chatDAO.findAllUsers(email);
     }
     @GetMapping("/findByEmail/{email}")
     public Optional<User> getUserByEmail(@PathVariable String email){
@@ -66,6 +67,11 @@ public class WebSocketController {
     @DeleteMapping("/deletemsg/{id}")
     public void deletemsg(@PathVariable int id){
         messageDAO.deleteById(id); ;
+    }
+
+    @GetMapping("/getlastmsg/{channelname}")
+    public MessageEntity getlastmsg(@PathVariable String channelname) {
+        return messageDAO.getTheLastMsg(channelname);
     }
     private Long createAndOrGetChat(String name) {
         ChatEntity ce = chatDAO.findByName(name);

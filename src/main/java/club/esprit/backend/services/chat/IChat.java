@@ -1,6 +1,7 @@
 package club.esprit.backend.services.chat;
 
 
+import club.esprit.backend.dto.chat.LastMessage;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.entities.chat.ChatEntity;
 
@@ -19,5 +20,5 @@ public interface IChat {
 
     public Optional<User> findUserByEmail(String email);
 
-    public List<User> findAllUsers();
+    public List<LastMessage> findAllUsers(String email);
 }

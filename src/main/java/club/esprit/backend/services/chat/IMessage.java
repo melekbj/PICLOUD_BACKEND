@@ -14,4 +14,6 @@ public interface IMessage {
     public void deleteFor(MessageEntity id);
     public void msgReact(MessageEntity id);
     public List<MessageEntity> findAllByChat(long chat_id);
+
+    public MessageEntity getTheLastMsg(String channulName);
 }
