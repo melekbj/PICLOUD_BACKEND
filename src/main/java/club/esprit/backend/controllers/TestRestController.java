@@ -18,10 +18,10 @@ public class TestRestController {
     }
 
     @PostMapping("/add-quiz/{img}")
-    public void importquiz(@RequestBody Quizimport quiz,@PathVariable("img") String img) {
+    public Test importquiz(@RequestBody Quizimport quiz,@PathVariable("img") String img) {
         //https://openquizzdb.org/media/cover/oqdb_quizz_204.jpg
         String image="https://openquizzdb.org/media/cover/oqdb_quizz_"+img+".jpg";
-         testService.importquiz(quiz,image);
+        return testService.importquiz(quiz,image);
     }
 
     @GetMapping("/retrieve-all-tests")

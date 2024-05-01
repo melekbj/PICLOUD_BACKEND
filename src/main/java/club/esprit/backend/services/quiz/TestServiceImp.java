@@ -140,7 +140,7 @@ public class TestServiceImp implements ITestService {
     }
 
     @Override
-    public void importquiz(Quizimport quiz, String imgnbr) {
+    public Test importquiz(Quizimport quiz, String imgnbr) {
         QQuizimport[] qQuizimport = quiz.getQuizz();
         Test test = new Test();
         test.setTitle(quiz.getNom());
@@ -149,7 +149,8 @@ public class TestServiceImp implements ITestService {
         for (QQuizimport q : qQuizimport) {
             Question question = new Question();
             question.setQuestion(q.getQuestion());
-
+            question.setImage(q.getQuestion());
+            question.setAnecdote(q.getAnecdote());
             Set<QuestionOption> options = new HashSet<>();
             String[] propositions = q.getPropositions();
             String ans = q.getRéponse();
@@ -170,7 +171,7 @@ public class TestServiceImp implements ITestService {
         test.setImage(imgnbr);
         test.setActive(true);
         test.setQuestions(questions);
-        testRepository.save(test);
+        return testRepository.save(test);
     }
 
 

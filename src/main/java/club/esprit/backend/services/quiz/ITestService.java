@@ -21,7 +21,7 @@ public interface ITestService {
 
     public void deletequestion(Long questionId);
 
-    public void importquiz(Quizimport quiz, String imgnbr);
+    public Test importquiz(Quizimport quiz, String imgnbr);
 
     //
 //
