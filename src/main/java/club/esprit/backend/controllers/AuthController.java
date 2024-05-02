@@ -5,7 +5,7 @@ import club.esprit.backend.dto.LoginResponse;
 import club.esprit.backend.dto.SignupRequest;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.repository.UserRepository;
-import club.esprit.backend.services.AuthService;
+import club.esprit.backend.services.IAuth;
 import club.esprit.backend.services.jwt.UserServiceImpl;
 import club.esprit.backend.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,7 +28,7 @@ import java.io.IOException;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthService authService;
+    private final IAuth IAuth;
     private final AuthenticationManager authenticationManager;
     private final UserServiceImpl customerService;
     private final JwtUtil jwtUtil;
@@ -36,9 +36,9 @@ public class AuthController {
 
 
     @Autowired
-    public AuthController(AuthService authService, AuthenticationManager authenticationManager,
+    public AuthController(IAuth IAuth, AuthenticationManager authenticationManager,
                           UserServiceImpl customerService, JwtUtil jwtUtil, UserRepository userRepository) {
-        this.authService = authService;
+        this.IAuth = IAuth;
         this.authenticationManager = authenticationManager;
         this.customerService = customerService;
         this.jwtUtil = jwtUtil;
@@ -48,7 +48,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
         try {
-            User createdUser = authService.createUser(signupRequest);
+            User createdUser = IAuth.createUser(signupRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
         } catch (RuntimeException e) {
             if (e.getMessage().equals("Email already exists")) {
@@ -84,4 +84,9 @@ public class AuthController {
             throw new BadCredentialsException("Incorrect email or password.");
         }
     }
+
+
+
+
+
 }
