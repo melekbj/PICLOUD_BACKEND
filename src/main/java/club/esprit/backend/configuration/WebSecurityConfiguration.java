@@ -29,21 +29,22 @@ public class WebSecurityConfiguration {
 
 
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-
-                        //.requestMatchers("/signup", "/login","/club/clubs").permitAll()
-
-                        //.requestMatchers("/api/**").authenticated()
-                        .anyRequest().permitAll())
-                        .sessionManagement(session -> session
+                        .requestMatchers("/auth/signup", "/auth/login", "/addRessource","/addRessourceToFavoris/**",
+                                "/deleteRessource/**","/uploadFile","/users/**",
+                                "verify-account", "/regenerate-otp","set-password", "forgot-password").permitAll()
+                        .requestMatchers("/api/**").authenticated())
+                .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 
 
 
