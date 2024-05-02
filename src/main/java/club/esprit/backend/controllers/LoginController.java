@@ -20,6 +20,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/login")
+//@RequestMapping("/auth/login")
 public class LoginController {
 
     private final AuthenticationManager authenticationManager;
