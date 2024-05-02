@@ -19,25 +19,8 @@ private PostRepository postRepository;
 
     @Override
     public Vote saveVote(Vote vote) {
-        // Check if a vote by the same user on the same post already exists
-        Optional<Vote> existingVote = voteRepository.findVoteByPostAndUser(vote.getPost(), vote.getUser());
-        if (existingVote.isPresent()) {
-            // If it does, check if the new vote is the same as the existing vote
-            Vote existingVoteEntity = existingVote.get();
-            if (existingVoteEntity.getVoteType() == vote.getVoteType()) {
-                // If it is, delete the existing vote
-                voteRepository.delete(existingVoteEntity);
-                return null;
-            } else {
-                // If it's not, update the existing vote
-                existingVoteEntity.setVoteType(vote.getVoteType());
-                voteRepository.save(existingVoteEntity);
-                return existingVoteEntity;
-            }
-        } else {
-            // If it doesn't, create a new vote
-            voteRepository.save(vote);
-        }
+        // Save the vote
+        voteRepository.save(vote);
 
         // Recalculate the vote count for the post
         Post post = vote.getPost();
@@ -53,6 +36,10 @@ private PostRepository postRepository;
         postRepository.save(post);
 
         return vote;
+    }
+    @Override
+    public Optional<Vote> findVoteByPostAndUserSpecific(Post post, User user) {
+        return voteRepository.findVoteByPostAndUserSpecific(post, user);
     }
     @Override
     public Optional<Vote> getVoteById(Long id) {

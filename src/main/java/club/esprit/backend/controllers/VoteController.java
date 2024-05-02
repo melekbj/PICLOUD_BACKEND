@@ -61,6 +61,18 @@ public class VoteController {
         existingVote.setVoteType(newVoteType);
         return ResponseEntity.ok(voteService.updateVote(id, newVoteType));
     }
+    @GetMapping("/post/{postId}/user/{userId}")
+    public ResponseEntity<Vote> getVoteByPostAndUser(@PathVariable Long postId, @PathVariable Long userId) {
+        Post post = postService.getPostById(postId)
+                .orElseThrow(() -> new RuntimeException("Post with id " + postId + " not found"));
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Vote vote = voteService.findVoteByPostAndUserSpecific(post, user)
+                .orElseThrow(() -> new RuntimeException("Vote not found for post id: " + postId + " and user id: " + userId));
+        return ResponseEntity.ok(vote);
+    }
     @DeleteMapping("/{postId}/cancel")
     public ResponseEntity<Void> cancelVote(@PathVariable Long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -15,4 +15,5 @@ public interface IVote {
     Optional<Vote> getTopVoteByPostAndUser(Post post, User user);
     Vote updateVote(Long id, Vote.VoteType newVoteType);
     void cancelVote(Long postId, User user);
+    Optional<Vote> findVoteByPostAndUserSpecific(Post post, User user);
 }

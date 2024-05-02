@@ -20,4 +20,6 @@ public interface IPost {
     Post updatePostName(Long id, String newName);
     Post updatePostDescription(Long id, String newDescription);
     Post updatePostUrl(Long id, String newUrl);
+    List<Post> getPostsByCategoryName(String categoryName);
+    List<Post> getPostsOrderedByVotes();
 }

@@ -25,7 +25,7 @@ return categoryRepository.save(category);
 
     @Override
     public Optional<Category> getCategoryByName(String name) {
-        return categoryRepository.findByName(name);
+        return null;
     }
 
     @Override

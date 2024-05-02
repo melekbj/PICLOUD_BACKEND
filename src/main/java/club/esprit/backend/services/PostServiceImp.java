@@ -24,6 +24,13 @@ public class PostServiceImp implements IPost{
         post.setCategory(category);
         return postRepository.save(post);
     }
+    public List<Post> getPostsOrderedByVotes() {
+        return postRepository.findAllByOrderByVoteCountDesc();
+    }
+    public List<Post> getPostsByCategoryName(String categoryName) {
+        Category category = categoryRepository.findByName(categoryName);
+        return postRepository.findAllByCategory(category);
+    }
     @Override
     public Post updateVoteCount(Long id, int voteCount) {
         Post post = postRepository.findById(id)

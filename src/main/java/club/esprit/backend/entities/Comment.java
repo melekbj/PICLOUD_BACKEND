@@ -32,15 +32,20 @@ public class Comment {
     @JoinColumn(name = "id", referencedColumnName = "id")
     private User user;
     @Transient
-    private String userName;
-    public String getUserName() {
-        return user != null ? user.getName() : null;
-    }
+    private String username;
+
     @PrePersist
     public void prePersist() {
         createdDate = Instant.now();
         if (user != null) {
-            userName = user.getName();
+            username = user.getName(); // Set the username when a comment is created
         }
     }
+    @PostLoad
+    public void postLoad() {
+        if (user != null) {
+            username = user.getName(); // Set the username when a comment is loaded
+        }
+    }
+
 }

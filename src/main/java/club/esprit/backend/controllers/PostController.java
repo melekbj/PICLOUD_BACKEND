@@ -1,8 +1,10 @@
 package club.esprit.backend.controllers;
 
+import club.esprit.backend.entities.Role;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.services.jwt.UserServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,14 +24,15 @@ public class PostController {
     private final IPost postService;
     private final CategoryServiceImp categoryService;
     private UserServiceImpl userService;
-
-    @PostMapping("/{categoryId}")
-    public ResponseEntity<Post> createPost(@RequestBody Post post, @PathVariable Long categoryId) {
+    private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-
-        User user = userService.findUserByEmail(principal.getUsername());
+        return userService.findUserByEmail(principal.getUsername());
+    }
+    @PostMapping("/{categoryId}")
+    public ResponseEntity<Post> createPost(@RequestBody Post post, @PathVariable Long categoryId) {
+        User user = getAuthenticatedUser();
         post.setUser(user);
         return ResponseEntity.ok(postService.savePost(post, categoryId));
     }
@@ -38,7 +41,14 @@ public class PostController {
     public ResponseEntity<Post> getPostById(@PathVariable Long id) {
         return ResponseEntity.of(postService.getPostById(id));
     }
-
+    @GetMapping("/by-votes")
+    public ResponseEntity<List<Post>> getPostsOrderedByVotes() {
+        return ResponseEntity.ok(postService.getPostsOrderedByVotes());
+    }
+    @GetMapping("/by-category-name/{categoryName}")
+    public ResponseEntity<List<Post>> getPostsByCategoryName(@PathVariable String categoryName) {
+        return ResponseEntity.ok(postService.getPostsByCategoryName(categoryName));
+    }
     @GetMapping
     public ResponseEntity<List<Post>> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
@@ -49,8 +59,19 @@ public class PostController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
-        return ResponseEntity.ok().build();
+        // Get the authenticated user
+        User user = getAuthenticatedUser();
+        // Get the post to be deleted
+        Post post = postService.getPostById(id)
+                .orElseThrow(() -> new RuntimeException("Post with id " + id + " not found"));
+
+        // Check if the authenticated user is the creator of the post or an admin
+        if (user.equals(post.getUser()) || user.getRole().equals(Role.ADMIN)) {
+            postService.deletePost(id);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
     @PutMapping("/vote/{id}")
     public ResponseEntity<Post> updateVoteCount(@PathVariable Long id, @RequestBody int voteCount) {

@@ -33,11 +33,20 @@ public class Post {
     public String getUserName() {
         return user != null ? user.getName() : null;
     }
+    @Transient
+    private String categoryName;
+    public String getCategoryName() {
+        return category != null ? category.getName() : null;
+    }
     @PrePersist
     public void prePersist() {
         createdDate = Instant.now();
         if (user != null) {
             userName = user.getName();
         }
+        if (category != null) {
+            categoryName = category.getName();
+        }
     }
+
 }
