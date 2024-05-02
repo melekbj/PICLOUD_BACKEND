@@ -75,11 +75,15 @@ public class ChatImpl implements IChat {
             if (!user.getEmail().equals(email)){
                 String channelName = this.getChannelName(user, curUser.get());
                 ChatEntity chat = chatRepository.findByName(channelName);
-                MessageEntity lastMessage = messageRepository.findFirstByChatIdOrderByCreatedAtDesc(chat.getChat_id());
+                MessageEntity lastMessage = null;
+                if (chat != null){
+                    lastMessage = messageRepository.findFirstByChatIdOrderByCreatedAtDesc(chat.getChat_id());
+
+                }
                 if (lastMessage == null){
-                    newUsersList.add(new LastMessage("Start the conversation...", user, ""));
+                    newUsersList.add(new LastMessage("Start the conversation...", user, "", ""));
                 }else {
-                    newUsersList.add(new LastMessage(lastMessage.getContent(), user, lastMessage.getSender()));
+                    newUsersList.add(new LastMessage(lastMessage.getContent(), user, lastMessage.getSender(), lastMessage.getT_stamp()));
                 }
             }
 

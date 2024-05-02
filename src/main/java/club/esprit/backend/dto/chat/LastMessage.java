@@ -12,4 +12,5 @@ public class LastMessage{
     public String lastMsg;
     public User user;
     public String sender;
+    public String tstamp;
 }
