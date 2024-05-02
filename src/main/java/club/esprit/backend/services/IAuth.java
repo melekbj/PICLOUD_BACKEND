@@ -4,7 +4,7 @@ import club.esprit.backend.dto.SignupRequest;
 import club.esprit.backend.entities.User;
 
 
-public interface AuthService {
+public interface IAuth {
     User createUser(SignupRequest signupRequest);
     public String verifyAccount(String email, String otp);
 

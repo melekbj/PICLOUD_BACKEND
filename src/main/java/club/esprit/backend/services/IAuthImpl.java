@@ -15,17 +15,16 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Service
-public class AuthServiceImpl implements AuthService {
+public class IAuthImpl implements IAuth {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
     private OtpUtil otpUtil;
     private EmailService emailUtil;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                            OtpUtil otpUtil, EmailService emailUtil) {
+    public IAuthImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                     OtpUtil otpUtil, EmailService emailUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.otpUtil = otpUtil;
@@ -45,6 +44,7 @@ public class AuthServiceImpl implements AuthService {
         BeanUtils.copyProperties(signupRequest, user);
 
         user.setRole(Role.MEMBRE);
+        user.setEtat("normal");
 
         // Generate and set OTP for the user
         String otp = otpUtil.generateOtp();  // Implement this method to generate an OTP
