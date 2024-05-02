@@ -1,3 +1,4 @@
+
 package club.esprit.backend.controllers;
 
 import club.esprit.backend.dto.LoginRequest;
@@ -50,7 +51,10 @@ public class LoginController {
         final UserDetails userDetails = customerService.loadUserByUsername(loginRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
 
-        return new LoginResponse(jwt);
+        // Generate refreshToken
+        final String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
+
+        return new LoginResponse(jwt, refreshToken);
     }
     @GetMapping("/api/user-role")
     public ResponseEntity<String> getUserRole(@RequestHeader("Authorization") String authHeader) {
