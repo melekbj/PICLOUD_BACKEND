@@ -4,29 +4,26 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
 @Setter
-public class User {
+public class Ressource {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String email;
-    private String password;
-    private boolean active;
-    private String otp;
-    private LocalDateTime otpGeneratedTime;
-
-
+    private String titre;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Categorie categorie;
 
+    @Temporal(TemporalType.DATE)
+    private Date dateCreation;
 
+    @ManyToOne
+    private Favoris favoris;
 
-
+    private String filePath;
 }

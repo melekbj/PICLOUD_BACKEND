@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+
 
 @Configuration
 @EnableWebSecurity
@@ -32,15 +34,18 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/signup", "/login").permitAll()
+                        .requestMatchers("/auth/signup", "/auth/login", "/addRessource","/addRessourceToFavoris/**",
+                                "/deleteRessource/**","/uploadFile", "/event/**", "/cloudinary/**",
+                                "verify-account", "/regenerate-otp","set-password", "forgot-password").permitAll()
                         .requestMatchers("/api/**").authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 
 
 
