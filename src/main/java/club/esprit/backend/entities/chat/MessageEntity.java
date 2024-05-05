@@ -43,4 +43,6 @@ public class MessageEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
+
+    private String filename;
 }
