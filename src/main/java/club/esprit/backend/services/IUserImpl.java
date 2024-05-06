@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -35,6 +36,11 @@ public class IUserImpl implements IUser {
         return userRepository.findAll().stream()
                 .filter(user -> user.getRole().equals(roleEnum))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<User> findUserByEmail(String email){
+        return userRepository.findByEmail(email);
     }
 
     @Override

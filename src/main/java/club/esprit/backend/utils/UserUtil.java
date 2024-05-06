@@ -16,7 +16,7 @@ public class UserUtil {
             return (UserDetails) principal;
         }
 
-        return null; // or throw an exception
+        return null;
     }
 
 }
