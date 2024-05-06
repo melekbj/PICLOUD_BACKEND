@@ -1,6 +1,7 @@
 package club.esprit.backend.controllers;
 
 import club.esprit.backend.entities.Event;
+import club.esprit.backend.entities.EventType;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.repository.UserRepository;
 import club.esprit.backend.services.AuthService;
@@ -31,7 +32,12 @@ public class EventRestController {
     }
     @GetMapping("/findByEmail/{email}")
     public Optional<User> getUserByEmail(@PathVariable String email){
+
         return iEvent.findUserByEmail(email) ;
+    }
+    @GetMapping("/getEventsByeventType/{eventType}")
+    public List<Event> getEventsByeventType(@PathVariable EventType eventType){
+        return iEvent.getEventsByeventType(eventType);
     }
 
 

@@ -1,6 +1,7 @@
 package club.esprit.backend.services.events;
 
 import club.esprit.backend.entities.Event;
+import club.esprit.backend.entities.EventType;
 import club.esprit.backend.entities.Participant;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.repository.EventRepository;
@@ -49,6 +50,11 @@ public class EventServiceImp  implements IEvent{
     @Override
     public Event getEvent(Long id) {
         return eventRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Event> getEventsByeventType(EventType eventType) {
+        return eventRepository.findByEventType(eventType);
     }
 
 }
