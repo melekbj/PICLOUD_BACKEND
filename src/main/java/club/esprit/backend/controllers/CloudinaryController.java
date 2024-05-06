@@ -33,11 +33,11 @@ public class CloudinaryController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
     @GetMapping("/imageurl/{id}")
-    public ResponseEntity<EventImage> getImageUrl(@PathVariable("id") int id){
+    public ResponseEntity<String> getImageUrl(@PathVariable("id") int id){
         Optional<EventImage> eventImageOptional = eventImageService.getOne(id);
         if (eventImageOptional.isPresent()) {
-            EventImage eventImage = eventImageOptional.get();
-            return new ResponseEntity<>(eventImage, HttpStatus.OK);
+            String imageUrl = eventImageOptional.get().getImageUrl();
+            return new ResponseEntity<>(imageUrl, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

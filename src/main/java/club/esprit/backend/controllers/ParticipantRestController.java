@@ -39,7 +39,7 @@ public class ParticipantRestController {
 
         Participant participant = new Participant();
         participant.setUser(user);
-      //  participant.setEvent(event);
+        participant.setEvent(event);
 
         return iParticipant.addParticipant(participant);
     }

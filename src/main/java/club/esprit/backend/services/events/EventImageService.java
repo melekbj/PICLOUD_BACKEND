@@ -35,12 +35,6 @@ public class EventImageService {
     public boolean exists(int id) {
         return eventImageRepository.existsById(id);
     }
-    public String getImageUrlById(int id) {
-        Optional<EventImage> eventImageOptional = eventImageRepository.findById(id);
-        if (eventImageOptional.isPresent()) {
-            return eventImageOptional.get().getImageUrl();
-        }
-        return null;
-    }
+
 }
 
