@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -22,5 +23,8 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    // Add this field for image
+    private String profileImage;
 
 }

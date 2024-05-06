@@ -5,6 +5,7 @@ import club.esprit.backend.entities.Role;
 import club.esprit.backend.entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUser {
 
@@ -17,4 +18,5 @@ public interface IUser {
     void setEtatToPending(Long id);
     void setEtatToAccepted(Long id);
     void setEtatToRejected(Long id);
-}
+
+    Optional<User> findUserByEmail(String email);}

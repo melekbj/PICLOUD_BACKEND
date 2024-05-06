@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/users")
+    @RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
 
@@ -43,9 +43,15 @@ public class UserController {
     }
 
     @GetMapping("/api/user")
-    public UserDetails getUser() {
-        return userUtil.getAuthenticatedUser();
+    public ResponseEntity<?> getUser() {
+        UserDetails userDetails = userUtil.getAuthenticatedUser();
+        if (userDetails != null) {
+            return ResponseEntity.ok(userDetails);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        }
     }
+
 
     @PutMapping("/{id}/pending")
     public void setPending(@PathVariable Long id) {
@@ -60,6 +66,12 @@ public class UserController {
     @PutMapping("/{id}/rejected")
     public void setRejected(@PathVariable Long id) {
         iUser.setEtatToRejected(id);
+    }
+
+
+    @GetMapping("/findByEmail/{email}")
+    public Optional<User> getUserByEmail(@PathVariable String email){
+        return iUser.findUserByEmail(email) ;
     }
 
 }
