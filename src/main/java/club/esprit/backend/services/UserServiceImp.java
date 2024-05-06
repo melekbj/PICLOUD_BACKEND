@@ -2,6 +2,7 @@ package club.esprit.backend.services;
 
 import club.esprit.backend.entities.Membership;
 import club.esprit.backend.entities.User;
+import club.esprit.backend.repository.MembershipRepository;
 import club.esprit.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,8 @@ import java.util.Optional;
 public class UserServiceImp implements UserService {
 
     private  UserRepository userRepository;
-
+    @Autowired
+    private MembershipRepository membershipRepository;
     @Autowired
     public UserServiceImp(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -79,7 +81,32 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public User deleteuserFromdepartment(Long userId, Long clubId) {
+
+
+            User user = userRepository.findById(userId).orElse(null);
+            if(user != null)
+            {
+               Membership membership = membershipRepository.findByClub_IdAndAndUserId(clubId,userId);
+                    if(membership != null)
+                    {
+                       // System.out.println(membership);
+                       membership.setDepartment(null);
+                       if(membership.isResponsable())
+                       {
+                           membership.setResponsable(false);
+                       }
+                        membershipRepository.save(membership);
+                    }
+            }
+            return user;
+    }
+
+    @Override
     public User getByEmail(String email) {
         return userRepository.findByEmail(email).get();
     }
+
+
+
 }

@@ -33,12 +33,14 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/signup", "/auth/login", "/addRessource","/addRessourceToFavoris/**",
-                                "/deleteRessource/**","/uploadFile","/users/**",
-                                "verify-account", "/regenerate-otp","set-password", "forgot-password").permitAll()
-                        .requestMatchers("/api/**").authenticated())
+                       // .requestMatchers("/auth/signup", "/auth/login", "/addRessource","/addRessourceToFavoris/**",
+                      //  "/deleteRessource/**","/uploadFile","/users/**",
+                               // "verify-account", "/regenerate-otp","set-password", "forgot-password").permitAll()
+
+                      // .requestMatchers("/api/**").authenticated())
+                        .anyRequest().permitAll())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

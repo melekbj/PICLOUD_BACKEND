@@ -97,4 +97,9 @@ public class UserRestController {
     public User getUserById(@PathVariable("e") String e) {
         return userService.getByEmail(e);
     }
+
+    @DeleteMapping("deleteUserFromDepartment/{userId}/{clubId}")
+    public User deleteuserFromdepartment(@PathVariable("userId")  Long userId,@PathVariable("clubId") Long clubId){
+        return userService.deleteuserFromdepartment(userId, clubId);
+    }
 }

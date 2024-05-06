@@ -19,5 +19,8 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
     @Query("SELECT m.user FROM Membership m WHERE m.department.id = :departmentId AND m.responsable = true")
     Optional<User> findResponsibleUserByDepartmentId(@Param("departmentId") Long departmentId);
 
+   // Membership findByDepartment_IdAndAndUser_Id(Long departmentId, Long userId);
+
+
 
 }
