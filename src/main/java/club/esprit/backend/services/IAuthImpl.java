@@ -6,8 +6,8 @@ import club.esprit.backend.entities.User;
 import club.esprit.backend.repository.UserRepository;
 import club.esprit.backend.utils.OtpUtil;
 import jakarta.mail.MessagingException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,60 +15,47 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Service
-public class AuthServiceImpl implements AuthService {
+@AllArgsConstructor
+public class IAuthImpl implements IAuth {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
     private OtpUtil otpUtil;
     private EmailService emailUtil;
 
-    @Autowired
-    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                            OtpUtil otpUtil, EmailService emailUtil) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.otpUtil = otpUtil;
-        this.emailUtil = emailUtil;
-
-    }
-
 
     @Override
     public User createUser(SignupRequest signupRequest) {
-        // Check if user already exists
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
 
         User user = new User();
         BeanUtils.copyProperties(signupRequest, user);
-
         user.setRole(Role.MEMBRE);
+        user.setEtat("NORMAL");
 
-        // Generate and set OTP for the user
-        String otp = otpUtil.generateOtp();  // Implement this method to generate an OTP
+        user.setProfileImage(signupRequest.getProfileImage()); // Set the image file name
+
+        // Generate and set OTP, hash the password, etc.
+        String otp = otpUtil.generateOtp();
         user.setOtp(otp);
-
         user.setOtpGeneratedTime(LocalDateTime.now());
 
-        // Hash the password before saving
-        String hashPassword = passwordEncoder.encode(signupRequest.getPassword());
-        user.setPassword(hashPassword);
+        String hashedPassword = passwordEncoder.encode(signupRequest.getPassword());
+        user.setPassword(hashedPassword);
 
-        // Save the user
         User createdUser = userRepository.save(user);
 
-        // Send verification email
+        // Handle email sending
         try {
-            emailUtil.sendOtpEmail(signupRequest.getEmail(), user.getOtp());
+            emailUtil.sendOtpEmail(signupRequest.getEmail(), otp);
         } catch (MessagingException e) {
-            throw new RuntimeException("Failed to send verification email. Please try again.");
+            throw new RuntimeException("Failed to send verification email.");
         }
 
         return createdUser;
     }
-
 
 
     @Override
