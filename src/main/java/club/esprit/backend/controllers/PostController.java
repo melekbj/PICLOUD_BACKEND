@@ -13,7 +13,9 @@ import club.esprit.backend.services.CategoryServiceImp;
 import club.esprit.backend.services.IPost;
 import club.esprit.backend.entities.Post;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -57,21 +59,15 @@ public class PostController {
     public ResponseEntity<List<Post>> getPostsByCategory(@PathVariable Long categoryId) {
         return ResponseEntity.ok(postService.getPostsByCategory(categoryId));
     }
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<Post> editPost(@PathVariable Long id, @RequestBody Post post) {
+        Post updatedPost = postService.editPost(id, post);
+        return ResponseEntity.ok(updatedPost);
+    }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
-        // Get the authenticated user
-        User user = getAuthenticatedUser();
-        // Get the post to be deleted
-        Post post = postService.getPostById(id)
-                .orElseThrow(() -> new RuntimeException("Post with id " + id + " not found"));
-
-        // Check if the authenticated user is the creator of the post or an admin
-        if (user.equals(post.getUser()) || user.getRole().equals(Role.ADMIN)) {
-            postService.deletePost(id);
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+    public ResponseEntity<Void>  deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
+        return ResponseEntity.ok().build();
     }
     @PutMapping("/vote/{id}")
     public ResponseEntity<Post> updateVoteCount(@PathVariable Long id, @RequestBody int voteCount) {
@@ -86,5 +82,10 @@ public class PostController {
         existingPost.setDescription(post.getDescription());
         existingPost.setUrl(post.getUrl());
         return ResponseEntity.ok(postService.udpatePost(existingPost));
+    }
+    @GetMapping("/share/{id}")
+    public ResponseEntity<String> generateShareableLink(@PathVariable Long id) {
+        String shareableLink = postService.generateShareableLink(id);
+        return ResponseEntity.ok(shareableLink);
     }
 }

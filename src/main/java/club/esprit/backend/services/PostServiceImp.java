@@ -1,5 +1,6 @@
 package club.esprit.backend.services;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import club.esprit.backend.entities.Category;
@@ -9,6 +10,7 @@ import club.esprit.backend.exceptions.PostNotFoundException;
 import club.esprit.backend.repository.CategoryRepository;
 import club.esprit.backend.repository.PostRepository;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -26,6 +28,13 @@ public class PostServiceImp implements IPost{
     }
     public List<Post> getPostsOrderedByVotes() {
         return postRepository.findAllByOrderByVoteCountDesc();
+    }
+    @Override
+    public Post editPost(Long id, Post updatedPost) {
+        Post existingPost = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException("Post with id " + id + " not found"));
+        existingPost.setDescription(updatedPost.getDescription());
+        return postRepository.save(existingPost);
     }
     public List<Post> getPostsByCategoryName(String categoryName) {
         Category category = categoryRepository.findByName(categoryName);
@@ -53,10 +62,14 @@ public class PostServiceImp implements IPost{
     }
 
     @Override
+    @Transactional
     public void deletePost(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException("Post with id " + id + " not found"));
+        Category category = post.getCategory();
+        category.getPosts().remove(post);
         postRepository.deleteById(id);
     }
-
     @Override
     public List<Post> getPostsByCategory(Category category) {
        return postRepository.findAllByCategory(category);
@@ -71,7 +84,13 @@ public class PostServiceImp implements IPost{
     public Post udpatePost(Post post) {
    return postRepository.save(post);
     }
-
+    @Override
+    public String generateShareableLink(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException("Post with id " + id + " not found"));
+        String baseUrl = "http://localhost:4200/view-post"; // replace with your frontend base URL
+        return baseUrl + "/" + post.getPostId();
+    }
 
 
     @Override

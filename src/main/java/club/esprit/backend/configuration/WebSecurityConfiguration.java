@@ -35,8 +35,8 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/signup", "/login").permitAll()
                         .requestMatchers("/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                        .requestMatchers("/auth/signup", "/auth/login", "verify-account", "/regenerate-otp","set-password", "forgot-password").permitAll()
-                        .requestMatchers("/api/category/**", "/api/comments/**", "/api/posts/**", "/api/votes/**","/api/hello", "/login/api/user-role","login/api/current-user").authenticated()
+                        .requestMatchers("/auth/signup", "/auth/login", "verify-account", "/regenerate-otp","set-password", "forgot-password","auth/api/user-role","auth/api/current-user").permitAll()
+                        .requestMatchers("/api/category/**", "/api/comments/**", "/api/posts/**", "/api/votes/**","/api/hello").authenticated()
                         .requestMatchers("/api/**").authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

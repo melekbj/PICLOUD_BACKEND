@@ -3,8 +3,9 @@ package club.esprit.backend.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.Instant;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -49,4 +50,8 @@ public class Post {
         }
     }
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vote> votes;
 }

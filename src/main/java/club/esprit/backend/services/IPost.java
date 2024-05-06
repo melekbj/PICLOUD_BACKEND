@@ -22,4 +22,6 @@ public interface IPost {
     Post updatePostUrl(Long id, String newUrl);
     List<Post> getPostsByCategoryName(String categoryName);
     List<Post> getPostsOrderedByVotes();
+    Post editPost(Long id, Post updatedPost);
+    String generateShareableLink(Long id);
 }

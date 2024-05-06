@@ -17,10 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -83,5 +80,24 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Incorrect email or password.");
         }
+    }
+    @GetMapping("/api/user-role")
+    public ResponseEntity<String> getUserRole(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        String email = jwtUtil.extractEmail(token);
+        System.out.println("Email: " + email); // Added print statement
+        String role = customerService.getUserRole(email);
+        System.out.println("Role: " + role); // Added print statement
+        return ResponseEntity.ok(role);
+    }
+
+    @GetMapping("/api/current-user")
+    public ResponseEntity<String> getCurrentUser(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        String email = jwtUtil.extractEmail(token);
+        System.out.println("Email: " + email); // Added print statement
+        User user = customerService.getUserByUsername(email);
+        System.out.println("User: " + user); // Added print statement
+        return ResponseEntity.ok(user.getName());
     }
 }
