@@ -29,10 +29,23 @@ public class WebSecurityConfiguration {
     }
 
     @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/auth/signup", "/auth/login",
+                                "verify-account", "/regenerate-otp","set-password", "forgot-password", "/chat-socket/**", "/api/getfile/**").permitAll()
+                        .requestMatchers("/api/**").authenticated())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+
     public MultipartFilter multipartFilter() {
         MultipartFilter multipartFilter = new MultipartFilter();
         multipartFilter.setMultipartResolverBeanName("multipartResolver");
         return multipartFilter;
+
     }
 
 
