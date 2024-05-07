@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/behaviorscore")
+@RequestMapping("/api/behaviorscore")
 public class BehaviorScoreRestController {
     private IBehaviorScoreService behaviorScoreService;
 

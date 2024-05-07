@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/requestToJoin")
+@RequestMapping("/api/requestToJoin")
 public class RequestToJoinController {
 
     @Autowired
