@@ -37,15 +37,22 @@ public class UserController {
         return ResponseEntity.ok(iUser.getAllUsers());
     }
 
-    @GetMapping("/usersByRole/{role}")
-    public ResponseEntity<?> getUsersByRole(@PathVariable String role) {
-        return ResponseEntity.ok(iUser.getUsersByRole(role));
+    @GetMapping("/usersByRoleAndEtat/{role}/{etat}")
+    public ResponseEntity<?> getUsersByRoleAndEtat(@PathVariable String role, @PathVariable String etat) {
+        return ResponseEntity.ok(iUser.getUsersByRoleAndEtat(role, etat));
     }
 
+
     @GetMapping("/api/user")
-    public UserDetails getUser() {
-        return userUtil.getAuthenticatedUser();
+    public ResponseEntity<?> getUser() {
+        UserDetails userDetails = userUtil.getAuthenticatedUser();
+        if (userDetails != null) {
+            return ResponseEntity.ok(userDetails);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        }
     }
+
 
     @PutMapping("/{id}/pending")
     public void setPending(@PathVariable Long id) {
@@ -53,8 +60,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}/accepted")
-    public void setAccepted(@PathVariable Long id) {
-        iUser.setEtatToAccepted(id);
+    public ResponseEntity<?> setAccepted(@PathVariable Long id) {
+        boolean isUpdated = iUser.setEtatToAccepted(id);
+        if (isUpdated) {
+            return ResponseEntity.ok().body("User status updated to accepted and role set to responsable.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}/rejected")
@@ -62,4 +74,19 @@ public class UserController {
         iUser.setEtatToRejected(id);
     }
 
+
+    @GetMapping("/findByEmail/{email}")
+    public Optional<User> getUserByEmail(@PathVariable String email){
+        return iUser.findUserByEmail(email) ;
+    }
+
+    @PutMapping("/{id}/updateProfile")
+    public ResponseEntity<?> updateUserProfile(@PathVariable Long id, @RequestBody User user) {
+        try {
+            iUser.updateUserProfile(id, user);
+            return ResponseEntity.ok().body("User profile updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user profile: " + e.getMessage());
+        }
+    }
 }

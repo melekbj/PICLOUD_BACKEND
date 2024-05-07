@@ -11,7 +11,6 @@ import jakarta.validation.constraints.Size;
 @Getter
 @Setter
 public class SignupRequest {
-
     @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")
     private String email;
@@ -24,4 +23,7 @@ public class SignupRequest {
 
     private Role role;
 
+    // This field will hold the file name after processing
+    private String profileImage;
 }
+

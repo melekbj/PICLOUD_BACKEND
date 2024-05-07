@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
 
+
 import java.util.List;
+
 
 @Entity
 @Getter
@@ -26,9 +28,13 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+
+    private String profileImage;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",cascade = CascadeType.ALL ,orphanRemoval = true)
     private List<Membership> memberships;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RequestToJoin> requestsToJoin;
+
 
 }

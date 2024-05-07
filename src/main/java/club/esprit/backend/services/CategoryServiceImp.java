@@ -41,7 +41,7 @@ categoryRepository.deleteById(id);
     @Override
     public Category updateCategoryName(Long id, String newName) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("Category with id " + id + " not found"));
+                .orElseThrow(() -> new CategoryNotFoundException("CategoryLibrary with id " + id + " not found"));
 
         category.setName(newName);
         return categoryRepository.save(category);
@@ -50,7 +50,7 @@ categoryRepository.deleteById(id);
     @Override
     public Category updateCategoryDescription(Long id, String newDescription) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("Category with id " + id + " not found"));
+                .orElseThrow(() -> new CategoryNotFoundException("CategoryLibrary with id " + id + " not found"));
 
         category.setDescription(newDescription);
         return categoryRepository.save(category);

@@ -20,7 +20,7 @@ public class PostServiceImp implements IPost{
     @Override
     public Post savePost(Post post, Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category with id " + categoryId + " not found"));
+                .orElseThrow(() -> new RuntimeException("CategoryLibrary with id " + categoryId + " not found"));
         post.setCategory(category);
         return postRepository.save(post);
     }

@@ -9,11 +9,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.multipart.support.MultipartFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -27,20 +29,24 @@ public class WebSecurityConfiguration {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
-
+    @Bean
+    public MultipartFilter multipartFilter() {
+        MultipartFilter multipartFilter = new MultipartFilter();
+        multipartFilter.setMultipartResolverBeanName("multipartResolver");
+        return multipartFilter;
+    }
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                       // .requestMatchers("/auth/signup", "/auth/login", "/addRessource","/addRessourceToFavoris/**",
-                      //  "/deleteRessource/**","/uploadFile","/users/**",
-                               // "verify-account", "/regenerate-otp","set-password", "forgot-password").permitAll()
-
-                      // .requestMatchers("/api/**").authenticated())
-                        .anyRequest().permitAll())
+                        .requestMatchers("/auth/**","/users/**","/club/**","/department/**","/paypal/**",
+                                        "/cloudinary/**",
+                                        "/img/**","/chat-socket/**", "/api/getfile/**","/event/**",
+                                "verify-account", "/regenerate-otp","set-password", "forgot-password").permitAll()
+                        .requestMatchers("/api/**").authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

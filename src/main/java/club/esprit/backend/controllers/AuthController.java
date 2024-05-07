@@ -9,81 +9,116 @@ import club.esprit.backend.services.IAuth;
 import club.esprit.backend.services.jwt.UserServiceImpl;
 import club.esprit.backend.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/auth")
+@AllArgsConstructor
 public class AuthController {
 
-    private final IAuth IAuth;
+    private final IAuth iAuth;
     private final AuthenticationManager authenticationManager;
     private final UserServiceImpl customerService;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
 
-    @Autowired
-    public AuthController(IAuth IAuth, AuthenticationManager authenticationManager,
-                          UserServiceImpl customerService, JwtUtil jwtUtil, UserRepository userRepository) {
-        this.IAuth = IAuth;
-        this.authenticationManager = authenticationManager;
-        this.customerService = customerService;
-        this.jwtUtil = jwtUtil;
-        this.userRepository = userRepository;
-    }
-
     @PostMapping("/signup")
-    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> signupUser(@RequestParam("email") String email,
+                                        @RequestParam("name") String name,
+                                        @RequestParam("password") String password,
+                                        @RequestParam("profileImage") MultipartFile profileImage) {
         try {
-            User createdUser = IAuth.createUser(signupRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-        } catch (RuntimeException e) {
-            if (e.getMessage().equals("Email already exists")) {
+            // Check if user already exists
+            if (userRepository.existsByEmail(email)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists");
-            } else {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
             }
+
+            // Process the profile image and create a SignupRequest
+            String filename = null;
+            if (profileImage != null && !profileImage.isEmpty()) {
+                String imagePath = "C:\\\\xampp\\\\htdocs\\\\img\\\\"; // Update this path
+                Path path = Paths.get(imagePath + profileImage.getOriginalFilename());
+                Files.write(path, profileImage.getBytes());
+                filename = profileImage.getOriginalFilename();
+            }
+
+            SignupRequest signupRequest = new SignupRequest();
+            signupRequest.setEmail(email);
+            signupRequest.setName(name);
+            signupRequest.setPassword(password);
+            signupRequest.setProfileImage(filename);
+
+            User createdUser = iAuth.createUser(signupRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save image");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
     }
 
+
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         try {
             // Authenticate user
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
 
-            // Check if the user is active
-            UserDetails userDetails = customerService.loadUserByUsername(loginRequest.getEmail());
+            // Check if the user is active and retrieve role
             User user = userRepository.findByEmail(loginRequest.getEmail())
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + loginRequest.getEmail()));
 
             if (!user.isActive()) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "User is not activated");
-                return null;
+                throw new DisabledException("User is not activated");
             }
 
             // Generate JWT token
+            UserDetails userDetails = customerService.loadUserByUsername(loginRequest.getEmail());
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
             String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
 
-            return new LoginResponse(jwt, refreshToken);
+            // Prepare the response with the user's role
+            LoginResponse loginResponse = new LoginResponse(jwt, refreshToken, user.getRole().name());
+
+            return ResponseEntity.ok(loginResponse);
+        } catch (DisabledException e) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body("User is not activated");
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Incorrect email or password.");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid email or password");
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(e.getMessage());
         }
     }
+
+
+
 
 
 

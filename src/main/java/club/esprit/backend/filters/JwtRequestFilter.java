@@ -2,6 +2,8 @@ package club.esprit.backend.filters;
 
 import club.esprit.backend.services.jwt.UserServiceImpl;
 import club.esprit.backend.utils.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +38,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
-            username = jwtUtil.extractUsername(token);
+            try {
+                username = jwtUtil.extractUsername(token);
+            } catch (ExpiredJwtException e) {
+                logger.error("JWT Token has expired");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT Token has expired");
+                return;
+            } catch (MalformedJwtException e) {
+                logger.error("Invalid JWT Token");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid JWT Token");
+                return;
+            } catch (Exception e) {
+                logger.error("Could not extract username from JWT Token");
+            }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -47,10 +61,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-
         }
 
         filterChain.doFilter(request, response);
-
     }
 }
