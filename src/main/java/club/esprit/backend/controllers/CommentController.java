@@ -68,4 +68,11 @@ public class CommentController {
         Comment updatedComment = commentService.updateComment(commentId, updatedText);
         return ResponseEntity.ok(updatedComment);
     }
+    @GetMapping("/count/{postId}")
+    public ResponseEntity<Long> getCommentCountByPostId(@PathVariable Long postId) {
+        Post post = postService.getPostById(postId)
+                .orElseThrow(() -> new RuntimeException("Post with id " + postId + " not found"));
+        long count = commentService.getCommentCountByPost(post);
+        return ResponseEntity.ok(count);
+    }
 }

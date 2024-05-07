@@ -29,8 +29,11 @@ public class Post {
     @JoinColumn(name = "category_id", nullable = false)
     @JsonIgnore
     private Category category;
+    private String image;
     @Transient
     private String userName;
+    @Transient
+    private Long commentCount;
     public String getUserName() {
         return user != null ? user.getName() : null;
     }

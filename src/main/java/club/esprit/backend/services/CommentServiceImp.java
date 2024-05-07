@@ -51,4 +51,8 @@ public class CommentServiceImp implements IComment{
         existingComment.setText(updatedText);
         return commentRepository.save(existingComment);
     }
+    @Override
+    public long getCommentCountByPost(Post post) {
+        return commentRepository.countByPost(post);
+    }
 }

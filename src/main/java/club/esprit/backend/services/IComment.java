@@ -15,5 +15,6 @@ public interface IComment {
    // Comment updateComment(Comment comment);
     List<Comment> getCommentsByPost(Post post);
     List<Comment> getCommentsByUser(User user);
+    long getCommentCountByPost(Post post);
     Comment updateComment(Long commentId, String updatedText);
 }
