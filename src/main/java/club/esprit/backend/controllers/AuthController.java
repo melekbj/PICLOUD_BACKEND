@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -73,27 +74,23 @@ public class AuthController {
     }
 
 
-
-
-
-
-
-
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         try {
             // Authenticate user
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
 
-            // Check if the user is active
+            // Check if the user is active and retrieve role
             User user = userRepository.findByEmail(loginRequest.getEmail())
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + loginRequest.getEmail()));
 
             if (!user.isActive()) {
-                return ResponseEntity
-                        .status(HttpStatus.FORBIDDEN)
-                        .body("User is not activated");
+                throw new DisabledException("User is not activated");
             }
 
             // Generate JWT token
@@ -101,13 +98,26 @@ public class AuthController {
             String jwt = jwtUtil.generateToken(userDetails.getUsername());
             String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
 
-            return ResponseEntity.ok(new LoginResponse(jwt, refreshToken));
+            // Prepare the response with the user's role
+            LoginResponse loginResponse = new LoginResponse(jwt, refreshToken, user.getRole().name());
+
+            return ResponseEntity.ok(loginResponse);
+        } catch (DisabledException e) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body("User is not activated");
         } catch (BadCredentialsException e) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Incorrect email or password.");
+                    .body("Invalid email or password");
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(e.getMessage());
         }
     }
+
+
 
 
 

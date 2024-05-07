@@ -1,6 +1,6 @@
 package club.esprit.backend.controllers.libary;
 
-import club.esprit.backend.entities.libary.Category;
+import club.esprit.backend.entities.libary.CategoryLibrary;
 import club.esprit.backend.services.libary.ICategoryService;
 import club.esprit.backend.services.libary.IFileService;
 import club.esprit.backend.services.libary.IResourceService;
@@ -68,12 +68,12 @@ public class ResourceController {
     }
 
     @PostMapping("/addcategory")
-    public Category addCategory(@RequestBody Category category){
+    public CategoryLibrary addCategory(@RequestBody CategoryLibrary category){
         return iCategoryService.addCategory(category);
     }
 
     @GetMapping("/getallcategory")
-    public List<Category> getallCat(){
+    public List<CategoryLibrary> getallCat(){
         return iCategoryService.getAll();
     }
 

@@ -1,7 +1,6 @@
 package club.esprit.backend.controllers;
 
 import club.esprit.backend.entities.Club;
-import club.esprit.backend.entities.User;
 import club.esprit.backend.entities.quiz.Test;
 import club.esprit.backend.services.IClubService;
 
@@ -18,7 +17,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/club")
 public class ClubRestController {
     private IClubService clubService;

@@ -31,12 +31,13 @@ public class IUserImpl implements IUser {
     }
 
     @Override
-    public List<User> getUsersByRole(String role) {
+    public List<User> getUsersByRoleAndEtat(String role, String etat) {
         Role roleEnum = Role.valueOf(role.toUpperCase());
         return userRepository.findAll().stream()
-                .filter(user -> user.getRole().equals(roleEnum))
+                .filter(user -> user.getRole().equals(roleEnum) && user.getEtat().equalsIgnoreCase(etat))
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public Optional<User> findUserByEmail(String email){
@@ -52,19 +53,26 @@ public class IUserImpl implements IUser {
         }
     }
     @Override
-    public void setEtatToAccepted(Long id) {
+    public boolean setEtatToAccepted(Long id) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
             user.setEtat("accepted");
+            user.setRole(Role.RESPONSABLE);
             userRepository.save(user);
+            return true;
+        }else {
+            return false;
         }
     }
+
+
     @Override
     public void setEtatToRejected(Long id) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
             user.setEtat("rejected");
             userRepository.save(user);
+
         }
     }
 }

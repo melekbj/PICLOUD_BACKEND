@@ -20,7 +20,7 @@ public class Resource {
     private String description;
 
     @ManyToOne
-    private Category category;
+    private CategoryLibrary category;
 
     @OneToMany
     private List<Files> filesName;

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-    @RequestMapping("/users")
+@RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
 
@@ -37,10 +37,11 @@ public class UserController {
         return ResponseEntity.ok(iUser.getAllUsers());
     }
 
-    @GetMapping("/usersByRole/{role}")
-    public ResponseEntity<?> getUsersByRole(@PathVariable String role) {
-        return ResponseEntity.ok(iUser.getUsersByRole(role));
+    @GetMapping("/usersByRoleAndEtat/{role}/{etat}")
+    public ResponseEntity<?> getUsersByRoleAndEtat(@PathVariable String role, @PathVariable String etat) {
+        return ResponseEntity.ok(iUser.getUsersByRoleAndEtat(role, etat));
     }
+
 
     @GetMapping("/api/user")
     public ResponseEntity<?> getUser() {
@@ -59,8 +60,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}/accepted")
-    public void setAccepted(@PathVariable Long id) {
-        iUser.setEtatToAccepted(id);
+    public ResponseEntity<?> setAccepted(@PathVariable Long id) {
+        boolean isUpdated = iUser.setEtatToAccepted(id);
+        if (isUpdated) {
+            return ResponseEntity.ok().body("User status updated to accepted and role set to responsable.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}/rejected")

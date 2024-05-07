@@ -13,10 +13,10 @@ public interface IUser {
 
     List<User> getAllUsers();
 
-    List<User> getUsersByRole(String role);
+    List<User> getUsersByRoleAndEtat(String role, String etat);
 
     void setEtatToPending(Long id);
-    void setEtatToAccepted(Long id);
+    boolean setEtatToAccepted(Long id);
     void setEtatToRejected(Long id);
 
     Optional<User> findUserByEmail(String email);}
