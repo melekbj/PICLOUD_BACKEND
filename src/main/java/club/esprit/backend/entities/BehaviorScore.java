@@ -43,9 +43,7 @@ public class BehaviorScore {
 
     @Column
     private String description;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id")
-    private Event event;
+
    @JsonIgnore
     public Membership getMembership() {
         return membership;
@@ -54,13 +52,5 @@ public class BehaviorScore {
     public void setMembership(Membership membership) {
         this.membership = membership;
     }
-    @JsonIgnore
-    public Event getEvent() {
-        return event;
-    }
 
-    @JsonProperty
-    public void setEvent(Event event) {
-        this.event = event;
-    }
 }

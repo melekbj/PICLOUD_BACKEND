@@ -56,9 +56,7 @@ public class BehaviorScoreServiceImpl implements IBehaviorScoreService {
             if (behaviorScore.getDescription() != null) {
                 existingBehaviorScore.setDescription(behaviorScore.getDescription());
             }
-            if (behaviorScore.getEvent() != null) {
-                existingBehaviorScore.setEvent(behaviorScore.getEvent());
-            }
+
             if (behaviorScore.getMembership() != null) {
                 existingBehaviorScore.setMembership(behaviorScore.getMembership());
             }
