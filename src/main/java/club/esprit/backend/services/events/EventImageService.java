@@ -5,7 +5,7 @@ import club.esprit.backend.entities.EventImage;
 import club.esprit.backend.repository.EventImageRepository;
 
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
@@ -14,9 +14,10 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class EventImageService {
 
-    @Autowired
+
     EventImageRepository eventImageRepository;
 
     public List<EventImage> list() {

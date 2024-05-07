@@ -4,6 +4,7 @@ package club.esprit.backend.services;
 import club.esprit.backend.entities.Role;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,18 @@ public class IUserImpl implements IUser {
     @Override
     public Optional<User> findUserByEmail(String email){
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public void updateUserProfile(Long userId, User updatedUser) {
+        userRepository.findById(userId).ifPresent(user -> {
+            user.setName(updatedUser.getName());
+//            user.setEmail(updatedUser.getEmail());
+            user.setPassword(updatedUser.getPassword());
+            user.setProfileImage(updatedUser.getProfileImage());
+            userRepository.save(user);
+        });
     }
 
     @Override

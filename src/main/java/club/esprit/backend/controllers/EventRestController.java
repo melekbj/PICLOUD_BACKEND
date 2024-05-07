@@ -4,25 +4,24 @@ import club.esprit.backend.entities.Event;
 import club.esprit.backend.entities.EventType;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.repository.UserRepository;
-import club.esprit.backend.services.AuthService;
 import club.esprit.backend.services.events.IEvent;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/event")
+@AllArgsConstructor
 public class EventRestController {
-    @Autowired
+
     private IEvent iEvent;
-    @Autowired
+
     private UserRepository userRepository;
 
     @PostMapping("/addEvent")
@@ -45,8 +44,8 @@ public class EventRestController {
 
     // @PostMapping("/addEvent")
     //public Event addEvent(@RequestBody Event e){
-       // return iEvent.addEvent(e);
-  //  }
+    // return iEvent.addEvent(e);
+    //  }
     @DeleteMapping("/deleteEvent/{id}")
     public void deleteEvent(@PathVariable Long id){
 

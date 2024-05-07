@@ -3,7 +3,7 @@ package club.esprit.backend.controllers;
 import club.esprit.backend.entities.EventImage;
 import club.esprit.backend.services.events.CloudinaryService;
 import club.esprit.backend.services.events.EventImageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +19,13 @@ import javax.imageio.ImageIO;
 
 @RestController
 @RequestMapping("/cloudinary")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
+@AllArgsConstructor
 public class CloudinaryController {
-    @Autowired
+
     CloudinaryService cloudinaryService;
 
-    @Autowired
+
     EventImageService eventImageService;
 
     @GetMapping("/list")

@@ -42,8 +42,9 @@ public class WebSecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**","/users/**","/club/**","/department/**",
-                                        "/img/**","/chat-socket/**", "/api/getfile/**",
+                        .requestMatchers("/auth/**","/users/**","/club/**","/department/**","/paypal/**",
+                                        "/cloudinary/**",
+                                        "/img/**","/chat-socket/**", "/api/getfile/**","/event/**",
                                 "verify-account", "/regenerate-otp","set-password", "forgot-password").permitAll()
                         .requestMatchers("/api/**").authenticated())
                 .sessionManagement(session -> session

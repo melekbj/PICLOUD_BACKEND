@@ -1,6 +1,7 @@
 package club.esprit.backend.services.events;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
+@AllArgsConstructor
 public class CloudinaryService {
     Cloudinary cloudinary;
 

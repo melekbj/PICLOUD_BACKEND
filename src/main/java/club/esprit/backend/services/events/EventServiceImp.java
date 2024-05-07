@@ -2,22 +2,22 @@ package club.esprit.backend.services.events;
 
 import club.esprit.backend.entities.Event;
 import club.esprit.backend.entities.EventType;
-import club.esprit.backend.entities.Participant;
 import club.esprit.backend.entities.User;
 import club.esprit.backend.repository.EventRepository;
 import club.esprit.backend.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class EventServiceImp  implements IEvent{
-    @Autowired
+
     private EventRepository eventRepository;
 
-    @Autowired
+
     private UserRepository userRepository;
     @Override
     public Event addEvent(Event e) {

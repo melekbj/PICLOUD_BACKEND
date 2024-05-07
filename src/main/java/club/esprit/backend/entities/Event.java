@@ -2,30 +2,40 @@ package club.esprit.backend.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-public class Event {
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
+@AllArgsConstructor
 
+public class Event implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private Date date;
-
-    @Column(nullable = false)
+    private String eventTitle;
+    private String eventDescription;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "eventImage_id")
+    private EventImage eventImage;
+    private int MaxParticipants;
+    @Enumerated(EnumType.STRING)
+    private EventType eventType;
     private String location;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event",cascade = CascadeType.ALL )
-    private List<BehaviorScore> behaviorScores;
+    private Date startDate;
+    private Date endDate;
+    private Boolean isPublic;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
+    private Set<Participant> participants;
+    @ManyToOne
+    @JoinColumn(name = "Creator_id")
+    private User creator;
 
 }
+
