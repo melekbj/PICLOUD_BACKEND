@@ -41,6 +41,16 @@ public class EmailService {
         mailSender.send(mimeMessage);
     }
 
+    ///////////////////////////////aymen/////////////////////////////////////
+    public void sendParticipant(String email, String message) throws MessagingException {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject("Event Participation");
+        mimeMessageHelper.setText(message, true);
+        mailSender.send(mimeMessage);
+    }
+
 
     public void sendSetPasswordEmail(String email) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();

@@ -6,7 +6,10 @@ import club.esprit.backend.entities.User;
 import club.esprit.backend.repository.EventRepository;
 import club.esprit.backend.repository.ParticipantRepository;
 import club.esprit.backend.repository.UserRepository;
+import club.esprit.backend.services.EmailService;
 import club.esprit.backend.services.events.IParticipant;
+import jakarta.mail.MessagingException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,20 +18,22 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
+@AllArgsConstructor
 @RequestMapping("/participant")
 public class ParticipantRestController {
-    @Autowired
+
     private IParticipant iParticipant;
-    @Autowired
+
     private UserRepository userRepository;
 
-    @Autowired
+
     private EventRepository eventRepository;
 
-    @Autowired
+
     private ParticipantRepository participantRepository;
+    private EmailService emailService;
     @PostMapping("/addParticipant")
-    public Participant addParticipant(@RequestBody Map<String, Long> body){
+    public Participant addParticipant(@RequestBody Map<String, Long> body) throws MessagingException {
         Long userId = body.get("userId");
         Long eventId = body.get("eventId");
 
@@ -38,8 +43,6 @@ public class ParticipantRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with id " + eventId));
 
         Participant participant = new Participant();
-        participant.setUser(user);
-        participant.setEvent(event);
 
         return iParticipant.addParticipant(participant);
     }
