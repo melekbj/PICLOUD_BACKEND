@@ -39,6 +39,8 @@ public class MessageEntity {
 
     private boolean reaction;
 
+    private String profileimage;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)

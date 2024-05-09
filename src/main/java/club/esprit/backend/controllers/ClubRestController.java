@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/club")
+@RequestMapping("/api/club")
 public class ClubRestController {
     private IClubService clubService;
 

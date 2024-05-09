@@ -19,6 +19,7 @@ public class IUserImpl implements IUser {
 
 
     private UserRepository userRepository;
+    private EmailService emailService;
 
     @Override
     public void setNewRole(User user, Role newRole) {
@@ -61,7 +62,7 @@ public class IUserImpl implements IUser {
     public void setEtatToPending(Long id) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
-            user.setEtat("pending");
+            user.setEtat("PENDING");
             userRepository.save(user);
         }
     }
@@ -69,11 +70,24 @@ public class IUserImpl implements IUser {
     public boolean setEtatToAccepted(Long id) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
-            user.setEtat("accepted");
+            user.setEtat("ACCEPTED");
             user.setRole(Role.RESPONSABLE);
             userRepository.save(user);
+
+            // Send email notification
+            try {
+                emailService.sendEmail(
+                        user.getEmail(),
+                        "Role Update Notification",
+                        "Your role has been updated to RESPONSABLE and your request has been approved."
+                );
+            } catch (Exception e) {
+                // Log the exception or handle it as necessary
+                e.printStackTrace();
+            }
+
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -83,8 +97,20 @@ public class IUserImpl implements IUser {
     public void setEtatToRejected(Long id) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
-            user.setEtat("rejected");
+            user.setEtat("REJECTED");
             userRepository.save(user);
+
+            // Send email notification
+            try {
+                emailService.sendEmail(
+                        user.getEmail(),
+                        "Role Rejection Notification",
+                        "Unfortunately, your request for the new role has not been approved."
+                );
+            } catch (Exception e) {
+                // Log the exception or handle it as necessary
+                e.printStackTrace();
+            }
 
         }
     }

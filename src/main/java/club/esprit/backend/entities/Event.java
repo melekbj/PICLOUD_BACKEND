@@ -29,6 +29,7 @@ public class Event implements Serializable {
     private String location;
     private Date startDate;
     private Date endDate;
+    private int price;
     private Boolean isPublic;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)

@@ -95,7 +95,7 @@ public class RequestToJoinServiceImpl implements RequestToJoinService {
             existingRequestToJoin.setStatus(newRequestToJoin.getStatus());
         }
         String message;
-        if(newRequestToJoin.getStatus().equals("Accepted"))
+        if(newRequestToJoin.getStatus().equals("APPROVED"))
         {message="Your application to join our club "+existingRequestToJoin.getClub().getName()+" has been accepted. Welcome to our club!";}
         else{
             message="Your application to join our club "+existingRequestToJoin.getClub().getName()+" has been rejected. We are sorry!";

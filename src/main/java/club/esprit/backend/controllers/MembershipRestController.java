@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 public class MembershipRestController {
 
     private MembershipService membershipService;
